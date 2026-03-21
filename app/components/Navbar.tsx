@@ -161,7 +161,7 @@ export default function Navbar() {
           </ul>
 
           {/* ── Right: Resume + hamburger ── */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex  md:pt-7 h-12 items-center gap-2 sm:gap-3 shrink-0">
             {/* Desktop Resume button */}
             <a
               ref={ctaRef}

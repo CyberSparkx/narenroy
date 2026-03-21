@@ -32,11 +32,6 @@ export default function Contact() {
       y: 40, opacity: 0, duration: 0.8, stagger: 0.12, ease: "power3.out",
     });
 
-    gsap.from(".social-item", {
-      scrollTrigger: { trigger: ".social-item", start: "top 90%" },
-      x: -30, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out",
-    });
-
     gsap.from(".contact-form", {
       scrollTrigger: { trigger: ".contact-form", start: "top 85%" },
       y: 60, opacity: 0, duration: 1, ease: "power4.out", delay: 0.2,
@@ -47,7 +42,6 @@ export default function Contact() {
       y: 25, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.4,
     });
 
-    // Stagger each word of the big name
     gsap.from(".deco-word", {
       scrollTrigger: { trigger: ".deco-text-wrap", start: "top 92%" },
       y: 80, opacity: 0, duration: 1.3, stagger: 0.18, ease: "expo.out",
@@ -92,17 +86,17 @@ export default function Contact() {
 
             <div className="space-y-3">
               <a href="mailto:narensarkar607@gmail.com"
-                className="group flex items-center gap-4 text-zinc-500 hover:text-white transition-colors duration-300">
+                className="group flex items-center gap-4 text-zinc-400 hover:text-white transition-colors duration-300">
                 <span className="w-10 h-10 shrink-0 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-emerald-500 group-hover:bg-emerald-500/10 transition-all duration-300">
-                  <Mail size={16} className="text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+                  <Mail size={16} className="text-zinc-400 group-hover:text-emerald-400 transition-colors" />
                 </span>
                 <span className="font-mono text-xs sm:text-sm break-all">narensarkar607@gmail.com</span>
                 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
               </a>
 
-              <div className="flex items-center gap-4 text-zinc-600">
+              <div className="flex items-center gap-4 text-zinc-400">
                 <span className="w-10 h-10 shrink-0 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                  <MapPin size={16} className="text-zinc-600" />
+                  <MapPin size={16} className="text-zinc-400" />
                 </span>
                 <span className="font-mono text-xs sm:text-sm">Siliguri, West Bengal, India</span>
               </div>
@@ -110,26 +104,27 @@ export default function Contact() {
 
             <div className="h-px bg-zinc-800 w-full" />
 
-            {/* Socials */}
+            {/* Socials — no animation, always visible */}
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-zinc-600 font-semibold mb-4">
+              <p className="text-xs uppercase tracking-[0.25em] text-zinc-500 font-semibold mb-4">
                 Find me on
               </p>
+
               <div className="space-y-1">
                 {socials.map(({ label, handle, url, Icon }) => (
                   <a key={label} href={url} target="_blank" rel="noopener noreferrer"
-                    className="social-item group flex items-center justify-between py-3 border-b border-zinc-900 hover:border-zinc-700 transition-all duration-300">
+                    className="group flex items-center justify-between py-3 border-b border-zinc-800 hover:border-zinc-700 transition-all duration-300">
                     <div className="flex items-center gap-3">
-                      <Icon size={15} className="text-zinc-600 group-hover:text-white transition-colors duration-300 shrink-0" />
-                      <span className="text-sm font-semibold text-zinc-500 group-hover:text-white transition-colors duration-300">
+                      <Icon size={15} className="text-zinc-400 group-hover:text-white transition-colors duration-300 shrink-0" />
+                      <span className="text-sm font-semibold text-zinc-300 group-hover:text-white transition-colors duration-300">
                         {label}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-zinc-700 group-hover:text-zinc-400 transition-colors duration-300 hidden sm:block">
+                      <span className="text-xs font-mono text-zinc-500 group-hover:text-zinc-300 transition-colors duration-300 hidden sm:block">
                         {handle}
                       </span>
-                      <ArrowUpRight size={13} className="text-zinc-700 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+                      <ArrowUpRight size={13} className="text-zinc-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
                     </div>
                   </a>
                 ))}
@@ -194,11 +189,11 @@ export default function Contact() {
                   <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
                     Message Sent!
                   </h3>
-                  <p className="text-zinc-500 text-sm max-w-xs">
+                  <p className="text-zinc-400 text-sm max-w-xs">
                     Thanks for reaching out. I'll get back to you as soon as possible.
                   </p>
                   <button onClick={() => setSent(false)}
-                    className="text-xs font-mono text-zinc-600 hover:text-white transition-colors mt-2 underline underline-offset-4">
+                    className="text-xs font-mono text-zinc-500 hover:text-white transition-colors mt-2 underline underline-offset-4">
                     Send another
                   </button>
                 </div>
@@ -211,16 +206,15 @@ export default function Contact() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <p className="text-xs font-mono text-zinc-600">Currently open to new opportunities</p>
+              <p className="text-xs font-mono text-zinc-500">Currently open to new opportunities</p>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* ── Big decorative NAREN ROY — fully responsive with clamp + glow ── */}
+      {/* ── Big decorative NAREN ROY ── */}
       <div className="deco-text-wrap relative mt-20 md:mt-28 w-full overflow-hidden select-none pointer-events-none">
-
-        {/* Draaksh-style horizontal green glow beam */}
         <div aria-hidden
           className="absolute bottom-0 left-0 right-0 h-[2px]"
           style={{ background: "linear-gradient(90deg, transparent, #34d399, transparent)", filter: "blur(1px)", opacity: 0.4 }} />
@@ -228,7 +222,6 @@ export default function Contact() {
           className="absolute bottom-0 left-0 right-0"
           style={{ height: "30%", background: "radial-gradient(ellipse 80% 100% at 50% 100%, #34d39928 0%, transparent 70%)", filter: "blur(20px)" }} />
 
-        {/* Words in a row — clamp font-size so both fit on one line at all widths */}
         <div className="flex items-end justify-center gap-[1.5vw] px-[0.5vw] pb-0">
           {["NAREN", "ROY"].map((word) => (
             <span
@@ -236,11 +229,9 @@ export default function Contact() {
               className="deco-word block font-black leading-[0.85] tracking-tighter"
               style={{
                 fontFamily: "'Syne', sans-serif",
-                /* clamp: min 1rem → scales → max never exceeds viewport */
                 fontSize: "clamp(1rem, 10.5vw, 10rem)",
                 color: "transparent",
                 WebkitTextStroke: "1.5px #2a2a2a",
-                /* Layered green glow matching Draaksh aesthetic */
                 filter: "drop-shadow(0 0 18px #34d39930) drop-shadow(0 0 60px #34d39918)",
               }}
             >
