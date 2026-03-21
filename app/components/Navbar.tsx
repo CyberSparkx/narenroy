@@ -37,6 +37,13 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* ── Close drawer on resize to desktop ── */
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   /* ── Entrance animation ── */
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -100,7 +107,7 @@ export default function Navbar() {
       >
         {/* ── Main floating bar ── */}
         <div
-          className="mx-4 mt-4 md:mx-8 lg:mx-12 rounded-2xl px-5 py-3 flex items-center justify-between transition-all duration-500"
+          className="mx-3 mt-3 sm:mx-5 sm:mt-4 md:mx-8 lg:mx-12 rounded-2xl px-4 sm:px-5 py-3 flex items-center justify-between gap-4 transition-all duration-500"
           style={{
             background: scrolled
               ? "rgba(22, 78, 210, 0.65)"
@@ -114,14 +121,14 @@ export default function Navbar() {
           }}
         >
           {/* ── Logo ── */}
-          <div ref={logoRef}>
+          <div ref={logoRef} className="shrink-0">
             <Link
               href="/"
               className="flex items-center gap-2.5 group"
               aria-label="Naren Roy — home"
             >
               <span
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm font-black transition-transform duration-300 group-hover:scale-110"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm font-black transition-transform duration-300 group-hover:scale-110 shrink-0"
                 style={{
                   background: "rgba(255,255,255,0.20)",
                   border: "1.5px solid rgba(255,255,255,0.35)",
@@ -129,23 +136,23 @@ export default function Navbar() {
               >
                 N
               </span>
-              <span className="hidden sm:block text-white font-bold text-[15px] tracking-tight">
+              <span className="hidden sm:block text-white font-bold text-[15px] tracking-tight whitespace-nowrap">
                 Naren Roy
               </span>
             </Link>
           </div>
 
-          {/* ── Desktop nav links ── */}
+          {/* ── Desktop nav links (hidden below md) ── */}
           <ul
             ref={linksRef}
-            className="hidden md:flex items-center gap-7"
+            className="hidden md:flex items-center gap-6 lg:gap-8"
             role="list"
           >
             {NAV_LINKS.map(({ label, href }) => (
               <li key={label}>
                 <a
                   href={href}
-                  className="nav-pill-link text-white/80 hover:text-white text-sm font-semibold tracking-wide transition-colors duration-200"
+                  className="nav-pill-link text-white/80 hover:text-white text-sm font-semibold tracking-wide transition-colors duration-200 whitespace-nowrap"
                 >
                   {label}
                 </a>
@@ -154,21 +161,21 @@ export default function Navbar() {
           </ul>
 
           {/* ── Right: Resume + hamburger ── */}
-          <div className="flex pt-5  items-center gap-3">
-            {/* Desktop Resume download button */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Desktop Resume button */}
             <a
               ref={ctaRef}
               href="/Naren_Roy_Resume.pdf"
               download="Naren_Roy_Resume.pdf"
-              className="resume-btn hidden md:flex items-center gap-2 px-4 py-2  rounded-xl text-sm font-bold text-white"
+              className="resume-btn hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white whitespace-nowrap"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-4 h-4 shrink-0" />
               Resume
             </a>
 
             {/* Mobile hamburger */}
             <button
-              className="md:hidden w-8 h-8 flex items-center justify-center rounded-xl text-white transition-colors"
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-xl text-white transition-colors shrink-0"
               style={{
                 background: "rgba(255,255,255,0.14)",
                 border: "1px solid rgba(255,255,255,0.25)",
@@ -188,11 +195,11 @@ export default function Navbar() {
         {/* ── Mobile drawer ── */}
         <div
           ref={drawerRef}
-          className="md:hidden mx-4 mt-1 rounded-2xl overflow-hidden"
+          className="md:hidden mx-3 sm:mx-5 mt-1 rounded-2xl overflow-hidden"
           style={{
             height: 0,
             opacity: 0,
-            background: "rgba(18, 65, 200, 0.78)",
+            background: "rgba(18, 65, 200, 0.82)",
             backdropFilter:       "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             border: "1px solid rgba(255,255,255,0.18)",
@@ -216,14 +223,14 @@ export default function Navbar() {
               <a
                 href="/Naren_Roy_Resume.pdf"
                 download="Naren_Roy_Resume.pdf"
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-bold text-white mt-2 transition-all"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all"
                 style={{
                   background: "rgba(255,255,255,0.16)",
                   border: "1px solid rgba(255,255,255,0.28)",
                 }}
                 onClick={() => setMenuOpen(false)}
               >
-                <FileText className="w-4 h-4" />
+                <FileText className="w-4 h-4 shrink-0" />
                 Download Resume
               </a>
             </li>

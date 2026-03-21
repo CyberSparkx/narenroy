@@ -150,7 +150,7 @@ export default function Experience() {
         {/* Heading */}
         <h2
           ref={headingRef}
-          className="text-5xl md:text-7xl font-black text-white mb-20 leading-none tracking-tight"
+          className="text-4xl md:text-7xl font-black text-white mb-20 leading-none tracking-tight"
           style={{ fontFamily: "'Syne', sans-serif" }}
         >
           Experience
