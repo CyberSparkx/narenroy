@@ -36,17 +36,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-## 📁 Project Structure
-
-```
-├── app/
-│   ├── page.tsx        # Home page
-│   ├── layout.tsx      # Root layout
-│   └── globals.css     # Global styles
-├── components/         # Reusable UI components
-├── public/             # Static assets
-└── lib/                # Utility functions
-```
 
 ## ✨ Features
 
@@ -63,6 +52,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the r
 - **Instagram:** [@iamnarenroy](https://instagram.com/iamnarenroy/)
 - **Twitter / X:** [@NarenRo26790356](https://x.com/NarenRo26790356)
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
