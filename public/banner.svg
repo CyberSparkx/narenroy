@@ -1,0 +1,123 @@
+<svg width="900" height="180" viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0d1a;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Purple glow filter (like Draaksh) -->
+    <filter id="glow" x="-30%" y="-60%" width="160%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="blur1"/>
+      <feGaussianBlur stdDeviation="20" result="blur2"/>
+      <feGaussianBlur stdDeviation="4" result="blur3"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur3"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle glow for subtitle -->
+    <filter id="subtleGlow" x="-20%" y="-60%" width="140%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Noise texture -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noiseOut"/>
+      <feColorMatrix type="saturate" values="0" in="noiseOut" result="grayNoise"/>
+      <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <!-- Glow aura behind name -->
+    <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.35"/>
+      <stop offset="60%" style="stop-color:#a855f7;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#000;stop-opacity:0"/>
+    </radialGradient>
+
+    <!-- Line gradient -->
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0a0a0f;stop-opacity:1"/>
+      <stop offset="30%" style="stop-color:#a855f7;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#7c3aed;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0a0a0f;stop-opacity:1"/>
+    </linearGradient>
+
+    <!-- Text gradient fill -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d8b4fe"/>
+      <stop offset="40%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#c084fc"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="180" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Noise overlay -->
+  <rect width="900" height="180" fill="url(#bgGrad)" filter="url(#noise)" opacity="0.04" rx="12"/>
+
+  <!-- Glow aura blob -->
+  <ellipse cx="450" cy="88" rx="340" ry="80" fill="url(#aura)"/>
+
+  <!-- Decorative top line -->
+  <rect x="100" y="30" width="700" height="1" fill="url(#lineGrad)" opacity="0.5"/>
+
+  <!-- Decorative bottom line -->
+  <rect x="100" y="150" width="700" height="1" fill="url(#lineGrad)" opacity="0.5"/>
+
+  <!-- Corner accents -->
+  <rect x="60" y="26" width="12" height="1" fill="#a855f7" opacity="0.8"/>
+  <rect x="60" y="26" width="1" height="12" fill="#a855f7" opacity="0.8"/>
+  <rect x="828" y="26" width="12" height="1" fill="#a855f7" opacity="0.8"/>
+  <rect x="839" y="26" width="1" height="12" fill="#a855f7" opacity="0.8"/>
+  <rect x="60" y="143" width="1" height="12" fill="#a855f7" opacity="0.8"/>
+  <rect x="60" y="154" width="12" height="1" fill="#a855f7" opacity="0.8"/>
+  <rect x="828" y="154" width="12" height="1" fill="#a855f7" opacity="0.8"/>
+  <rect x="839" y="143" width="1" height="12" fill="#a855f7" opacity="0.8"/>
+
+  <!-- Ghost/shadow text for depth -->
+  <text
+    x="450" y="108"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="72"
+    font-weight="bold"
+    letter-spacing="10"
+    text-anchor="middle"
+    fill="#7c3aed"
+    opacity="0.25"
+    filter="url(#glow)"
+  >NAREN ROY</text>
+
+  <!-- Main glowing name -->
+  <text
+    x="450" y="108"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="72"
+    font-weight="bold"
+    letter-spacing="10"
+    text-anchor="middle"
+    fill="url(#textGrad)"
+    filter="url(#glow)"
+  >NAREN ROY</text>
+
+  <!-- Subtitle -->
+  <text
+    x="450" y="136"
+    font-family="'Courier New', monospace"
+    font-size="13"
+    letter-spacing="6"
+    text-anchor="middle"
+    fill="#a855f7"
+    filter="url(#subtleGlow)"
+    opacity="0.9"
+  >FRONTEND DEVELOPER  ·  SILIGURI</text>
+</svg>
