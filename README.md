@@ -8,7 +8,7 @@ A personal portfolio website built with [Next.js](https://nextjs.org), showcasin
 
 ## 🚀 Live Demo
 
-> Coming soon / [Visit Portfolio](#)
+> Live Link : https://www.narenroy.in / 
 
 ## 🛠️ Tech Stack
 
