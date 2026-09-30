@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Phone, Mail, Linkedin, Github, Check } from "lucide-react";
+import { Phone, Mail, Linkedin, Github, Check, FileText } from "lucide-react";
 import PixelShaderCanvas from "./PixelShaderCanvas";
 
 export default function Hero() {
@@ -193,7 +193,7 @@ export default function Hero() {
         </a>
 
         {/* Nav Links */}
-        <nav aria-label="Hero navigation" className="flex items-center gap-3 sm:gap-6 md:gap-8 lg:gap-11">
+        <nav aria-label="Hero navigation" className="flex items-center gap-2.5 sm:gap-5 md:gap-7 lg:gap-9">
           {[
             { label: "about", href: "#about" },
             { label: "projects", href: "#projects" },
@@ -209,6 +209,19 @@ export default function Hero() {
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black group-hover:w-full transition-all duration-200" />
             </a>
           ))}
+
+          {/* Download Resume Button */}
+          <a
+            href="/Naren_Roy_Resume.pdf"
+            download="Naren_Roy_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-[#1b1a17]/30 hover:border-black text-[10px] sm:text-xs md:text-[13px] font-semibold text-[#1b1a17] hover:bg-[#1b1a17] hover:text-[#E6E2D7] transition-all duration-200 shadow-sm cursor-pointer group shrink-0"
+            title="Download Resume (PDF)"
+          >
+            <FileText className="w-3 sm:w-3.5 h-3 sm:h-3.5 opacity-80 group-hover:opacity-100 transition-opacity shrink-0" />
+            <span>resume</span>
+          </a>
         </nav>
       </header>
 
