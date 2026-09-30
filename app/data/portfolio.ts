@@ -4,8 +4,8 @@ export const portfolioData = {
     role: "Front End Developer",
     email: "narensarkar607@gmail.com",
     location: "Siliguri, West Bengal, India",
-    linkedin: "https://www.linkedin.com/in/narensarkar607", // Probable placeholder
-    github: "https://github.com/narensarkar607",   // Probable placeholder
+    linkedin: "https://www.linkedin.com/in/naren-roy-4390a6238/",
+    github: "https://github.com/CyberSparkx",
     summary:
       "Frontend Developer and Associate Developer experienced in building responsive, high-performance interfaces using React and JavaScript. Skilled in MERN stack development, UI optimization, and collaborating with teams to deliver scalable, user-focused applications.",
   },
@@ -64,7 +64,7 @@ export const portfolioData = {
       description:
         "Animated energy drink product showcase using React.js, Tailwind CSS, and GSAP, achieving smooth 60 fps animations.",
       links: [
-        { label: "GitHub", url: "https://github.com/narensarkar607" }, // Placeholder based on email username
+        { label: "GitHub", url: "https://github.com/CyberSparkx" }, // Placeholder based on email username
         { label: "Live Demo", url: "#" },
       ],
     },
@@ -74,7 +74,7 @@ export const portfolioData = {
       description:
         "Animation-rich volleyball brand site built with React.js and GSAP, connected to backend API for real-time product updates.",
       links: [
-        { label: "GitHub", url: "https://github.com/narensarkar607" },
+        { label: "GitHub", url: "https://github.com/CyberSparkx" },
         { label: "Live Demo", url: "#" },
       ],
     },
@@ -84,7 +84,7 @@ export const portfolioData = {
       description:
         "Cold drink brand web app developed with React.js, Tailwind CSS, and GSAP animations, integrating REST APIs to boost engagement.",
       links: [
-        { label: "GitHub", url: "https://github.com/narensarkar607" },
+        { label: "GitHub", url: "https://github.com/CyberSparkx" },
         { label: "Live Demo", url: "#" },
       ],
     },

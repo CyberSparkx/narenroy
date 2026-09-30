@@ -35,17 +35,17 @@ export default function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // 1. Background energy effect entrance
+      // 1. Entrance animation for background art layer
       tl.fromTo(
         bgLayerRef.current,
-        { opacity: 0, scale: 1.08 },
-        { opacity: 1, scale: 1, duration: 1.3, ease: "power2.out" }
+        { opacity: 0, scale: 1.04 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
       )
-        // 2. Cutout portrait entrance (slight parallax entrance)
+        // 2. Entrance animation for portrait layer
         .fromTo(
           meLayerRef.current,
-          { opacity: 0, x: 40, scale: 0.98 },
-          { opacity: 1, x: 0, scale: 1, duration: 1.1, ease: "expo.out" },
+          { opacity: 0, x: 25, scale: 0.98 },
+          { opacity: 1, x: 0, scale: 1, duration: 1.0, ease: "expo.out" },
           "-=0.9"
         )
         // 3. Navigation header
@@ -62,11 +62,11 @@ export default function Hero() {
           { x: 0, opacity: 1, duration: 0.6 },
           "-=0.5"
         )
-        // 5. Headline
+        // 5. Headline with brushed ink reveal
         .fromTo(
           headlineRef.current,
-          { x: -40, opacity: 0, filter: "blur(8px)" },
-          { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "power4.out" },
+          { x: -30, opacity: 0, filter: "blur(6px)" },
+          { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.85, ease: "power3.out" },
           "-=0.45"
         )
         // 6. Contact strip
@@ -103,31 +103,7 @@ export default function Hero() {
           ease: "sine.inOut",
         });
       }
-
-      // Interactive 2.5D Multi-layer mouse parallax (desktop only)
-      if (window.innerWidth >= 1024) {
-        const bgXTo = gsap.quickTo(bgLayerRef.current, "x", { duration: 1.0, ease: "power2.out" });
-        const bgYTo = gsap.quickTo(bgLayerRef.current, "y", { duration: 1.0, ease: "power2.out" });
-
-        const meXTo = gsap.quickTo(meLayerRef.current, "x", { duration: 0.7, ease: "power2.out" });
-        const meYTo = gsap.quickTo(meLayerRef.current, "y", { duration: 0.7, ease: "power2.out" });
-
-        const handleMouseMove = (e: MouseEvent) => {
-          const { clientX, clientY } = e;
-          const xNorm = clientX / window.innerWidth - 0.5;
-          const yNorm = clientY / window.innerHeight - 0.5;
-
-          // Background moves slower, foreground portrait moves faster
-          bgXTo(xNorm * 10);
-          bgYTo(yNorm * 8);
-
-          meXTo(xNorm * 22);
-          meYTo(yNorm * 16);
-        };
-
-        window.addEventListener("mousemove", handleMouseMove, { passive: true });
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-      }
+      // Note: Mouse parallax on background and portrait has been disabled per user request
     },
     { scope: containerRef }
   );
@@ -145,24 +121,6 @@ export default function Hero() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap');
 
-        .ink-headline {
-          font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
-          font-weight: 900;
-          color: #171614;
-          letter-spacing: -0.04em;
-          line-height: 0.88;
-        }
-
-        .motion-ink-blur {
-          position: relative;
-          display: inline-block;
-          text-shadow: 
-            3px 0 6px rgba(23, 22, 20, 0.45),
-            12px 0 16px rgba(23, 22, 20, 0.30),
-            26px 0 28px rgba(23, 22, 20, 0.18),
-            50px 0 45px rgba(23, 22, 20, 0.10);
-        }
-
         .paper-grain {
           background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
           background-size: 4px 4px;
@@ -177,12 +135,12 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── MULTI-LAYER ARTWORK (bg.png & me.png) ── */}
+      {/* ── MULTI-LAYER ARTWORK (STILL - NO MOUSE MOVEMENT) ── */}
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-        {/* Layer 1: Background Yellow Energy / Art blast */}
+        {/* Layer 1: Background Yellow Energy / Art blast (Static) */}
         <div
           ref={bgLayerRef}
-          className="absolute inset-0 w-full h-full will-change-transform"
+          className="absolute inset-0 w-full h-full"
         >
           <Image
             src="/bg.png"
@@ -194,10 +152,10 @@ export default function Hero() {
           />
         </div>
 
-        {/* Layer 2: Cutout Portrait Layer */}
+        {/* Layer 2: Cutout Portrait Layer (Static) */}
         <div
           ref={meLayerRef}
-          className="absolute inset-0 w-full h-full will-change-transform z-10"
+          className="absolute inset-0 w-full h-full z-10"
         >
           <Image
             src="/me.png"
@@ -261,12 +219,17 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Main Display Headline (Live Typography matching reference) */}
-          <div ref={headlineRef} className="mb-4 sm:mb-6 select-text">
-            <h1 className="ink-headline text-[3.6rem] sm:text-[5rem] md:text-[6.2rem] lg:text-[7.2rem] tracking-tight">
-              <span className="motion-ink-blur block">Naren</span>
-              <span className="motion-ink-blur block">Roy</span>
-            </h1>
+          {/* Main Display Headline (Authentic Brushed Ink Typography) */}
+          <div ref={headlineRef} className="mb-4 sm:mb-6">
+            <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
+
+            <div className="relative inline-block select-none">
+              <img
+                src="/naren-roy-title.png"
+                alt="Naren Roy"
+                className="w-[290px] sm:w-[370px] md:w-[440px] lg:w-[490px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+              />
+            </div>
           </div>
 
           {/* Contact Bar */}
@@ -313,7 +276,7 @@ export default function Hero() {
             {/* Social Icons */}
             <div className="flex items-center gap-2">
               <a
-                href="https://www.linkedin.com/in/narensarkar607"
+                href="https://www.linkedin.com/in/naren-roy-4390a6238/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-1 rounded hover:bg-black/5 hover:text-[#0a66c2] transition-colors"
@@ -323,7 +286,7 @@ export default function Hero() {
                 <Linkedin className="w-3.5 h-3.5" />
               </a>
               <a
-                href="https://github.com/narensarkar607"
+                href="https://github.com/CyberSparkx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-1 rounded hover:bg-black/5 hover:text-black transition-colors"
