@@ -243,8 +243,8 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
 
-      // When cursor is anywhere over the artwork canvas
-      if (x >= 0.0 && x <= 1.0 && y >= 0.0 && y <= 1.0) {
+      // Active over the right 65% area where the portrait & yellow energy are
+      if (x > 0.35 && x <= 1.0 && y >= 0.0 && y <= 1.0) {
         mouse.x = x;
         mouse.y = y;
         targetHover = 1.0;

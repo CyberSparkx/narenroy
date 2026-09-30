@@ -129,20 +129,37 @@ export default function Hero() {
           background-size: 4px 4px;
         }
 
-        /* Desktop & Landscape layout: 2-column side-by-side with interactive WebGL */
-        @media (min-width: 1024px) and (orientation: landscape) {
-          .hero-main-content {
-            flex-direction: row !important;
+        /* ── Tablet Portrait Viewports Only (768px to 1023px, portrait) ── */
+        @media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+          .hero-main-row {
+            flex-direction: column !important;
+            justify-content: center !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+            gap: 1.5rem !important;
           }
           .hero-left-col {
-            width: 48% !important;
-            max-width: none !important;
+            width: 100% !important;
+            max-width: 580px !important;
+          }
+          .hero-headline-img {
+            width: 440px !important;
           }
           .hero-portrait-art {
+            display: block !important;
+            width: 100% !important;
+            max-width: 540px !important;
+            height: auto !important;
+            aspect-ratio: 16 / 11 !important;
+            margin: 1.25rem auto !important;
+          }
+          .hero-right-col {
             display: none !important;
           }
-          .hero-desktop-art {
-            display: flex !important;
+          .hero-contact-bar {
+            font-size: 13px !important;
+            gap: 1rem !important;
+            margin-bottom: 1.25rem !important;
           }
         }
       `}</style>
@@ -195,13 +212,26 @@ export default function Hero() {
         </nav>
       </header>
 
-      {/* ── MAIN CONTENT: RESPONSIVE TWO-COLUMN (Landscape/Desktop) & STACK (Mobile/Tablet Portrait) ── */}
-      <div className="hero-main-content relative z-30 w-full flex-1 flex flex-col lg:landscape:flex-row items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 lg:py-4 gap-4 sm:gap-6 md:gap-8 lg:gap-8 my-auto">
+      {/* ── DESKTOP FULL-BLEED ARTWORK WITH INTERACTIVE WEBGL SHADER (Desktop Only: lg:block) ── */}
+      <div className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+        <div
+          ref={desktopArtRef}
+          className="absolute inset-0 w-full h-full pointer-events-auto z-10"
+        >
+          <PixelShaderCanvas
+            bgSrc="/bg.png"
+            meSrc="/me.png"
+          />
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT (LEFT COLUMN ON DESKTOP, VERTICAL FLOW ON TABLET & MOBILE) ── */}
+      <div className="hero-main-row relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-10 lg:px-16 py-3 md:py-4 lg:py-6 my-auto pointer-events-none">
         
-        {/* ── LEFT / TOP COLUMN: TYPOGRAPHY, BIO & CONTACT DETAILS ── */}
-        <div className="hero-left-col w-full max-w-xl md:max-w-2xl lg:max-w-none lg:landscape:w-[48%] xl:landscape:w-[45%] flex flex-col justify-center shrink-0">
+        {/* ── TYPOGRAPHY, BIO & CONTACT DETAILS ── */}
+        <div className="hero-left-col w-full max-w-xl lg:max-w-2xl flex flex-col justify-center pointer-events-auto shrink-0">
           {/* Eyebrow */}
-          <div ref={eyebrowRef} className="hero-eyebrow flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2.5 md:mb-3">
+          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2.5 md:mb-3">
             <span className="w-6 sm:w-10 h-[1.5px] bg-[#1c1b18]/70" />
             <span className="text-[9px] sm:text-[10px] md:text-xs font-bold tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#47443c]">
               FULL STACK SOFTWARE DEVELOPER
@@ -209,22 +239,22 @@ export default function Hero() {
           </div>
 
           {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
-          <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-5">
+          <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-4 lg:mb-5">
             <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
 
             <div className="relative inline-block select-none">
               <img
                 src="/naren-roy-title.png"
                 alt="Naren Roy"
-                className="w-[210px] xs:w-[250px] sm:w-[320px] md:w-[440px] lg:w-[460px] xl:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
+                className="hero-headline-img w-[210px] xs:w-[250px] sm:w-[320px] md:w-[440px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
               />
             </div>
           </div>
 
-          {/* ── MOBILE & TABLET-PORTRAIT ARTWORK SHOWCASE (Hidden on Desktop & Tablet Landscape) ── */}
+          {/* ── MOBILE & TABLET ARTWORK SHOWCASE (Hidden on Desktop: lg:hidden) ── */}
           <div
             ref={mobileArtRef}
-            className="hero-portrait-art lg:landscape:hidden relative w-full max-w-[290px] sm:max-w-[360px] md:max-w-[540px] aspect-[4/3] md:aspect-[16/11] mx-auto my-3 sm:my-4 md:my-6 overflow-hidden rounded-xl"
+            className="hero-portrait-art lg:hidden relative w-full max-w-[290px] sm:max-w-[340px] md:max-w-[540px] aspect-[4/3] md:aspect-[16/11] mx-auto my-2.5 sm:my-4 md:my-6 overflow-hidden rounded-xl"
           >
             <div className="absolute inset-0 w-full h-full">
               <Image
@@ -251,7 +281,7 @@ export default function Hero() {
           {/* Contact Bar */}
           <div
             ref={contactRef}
-            className="hero-contact flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 text-[11px] sm:text-xs md:text-[13px] text-[#2b2923] font-medium mb-3 sm:mb-4 md:mb-6"
+            className="hero-contact-bar flex flex-wrap items-center gap-x-2.5 gap-y-1.5 sm:gap-x-3 text-[11px] sm:text-xs md:text-[13px] text-[#2b2923] font-medium mb-3 sm:mb-4 md:mb-5 lg:mb-6"
           >
             {/* Phone */}
             <a
@@ -317,7 +347,7 @@ export default function Hero() {
           {/* Bio Quote Block */}
           <div
             ref={quoteRef}
-            className="hero-quote flex items-stretch gap-2.5 sm:gap-3 max-w-sm sm:max-w-md md:max-w-xl select-text"
+            className="flex items-stretch gap-2.5 sm:gap-3 max-w-sm sm:max-w-md lg:max-w-lg select-text"
           >
             {/* Yellow Accent Bar */}
             <div className="w-[3px] rounded-full bg-[#f3b413] shrink-0" />
@@ -327,22 +357,6 @@ export default function Hero() {
               <br className="hidden sm:inline" /> WebGL and immersive digital experiences.
             </p>
           </div>
-        </div>
-
-        {/* ── RIGHT COLUMN: TABLET LANDSCAPE & DESKTOP ARTWORK SHOWCASE ── */}
-        <div className="hero-desktop-art hidden flex-1 items-center justify-center lg:justify-end h-[420px] lg:h-[520px] xl:h-[600px] relative w-full overflow-hidden">
-          
-          {/* Desktop Interactive WebGL Water Ripple & Pixel Shader Canvas */}
-          <div
-            ref={desktopArtRef}
-            className="relative w-full h-full pointer-events-auto"
-          >
-            <PixelShaderCanvas
-              bgSrc="/bg.png"
-              meSrc="/me.png"
-            />
-          </div>
-
         </div>
 
       </div>
