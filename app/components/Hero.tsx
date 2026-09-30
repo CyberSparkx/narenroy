@@ -1,15 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Phone, Mail, Linkedin, Github, Check } from "lucide-react";
+import PixelShaderCanvas from "./PixelShaderCanvas";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const bgLayerRef = useRef<HTMLDivElement>(null);
-  const meLayerRef = useRef<HTMLDivElement>(null);
+  const artLayerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
@@ -35,55 +34,48 @@ export default function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // 1. Entrance animation for background art layer
+      // 1. Entrance animation for the WebGL artwork layer
       tl.fromTo(
-        bgLayerRef.current,
-        { opacity: 0, scale: 1.04 },
+        artLayerRef.current,
+        { opacity: 0, scale: 1.03 },
         { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
       )
-        // 2. Entrance animation for portrait layer
-        .fromTo(
-          meLayerRef.current,
-          { opacity: 0, x: 25, scale: 0.98 },
-          { opacity: 1, x: 0, scale: 1, duration: 1.0, ease: "expo.out" },
-          "-=0.9"
-        )
-        // 3. Navigation header
+        // 2. Navigation header
         .fromTo(
           navRef.current,
           { y: -20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.7 },
           "-=0.7"
         )
-        // 4. Eyebrow
+        // 3. Eyebrow
         .fromTo(
           eyebrowRef.current,
           { x: -30, opacity: 0 },
           { x: 0, opacity: 1, duration: 0.6 },
           "-=0.5"
         )
-        // 5. Headline with brushed ink reveal
+        // 4. Headline with full y descender
         .fromTo(
           headlineRef.current,
           { x: -30, opacity: 0, filter: "blur(6px)" },
           { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.85, ease: "power3.out" },
           "-=0.45"
         )
-        // 6. Contact strip
+        // 5. Contact strip
         .fromTo(
           contactRef.current,
           { y: 15, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6 },
           "-=0.4"
         )
-        // 7. Bio quote
+        // 6. Bio quote
         .fromTo(
           quoteRef.current,
           { y: 15, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.65 },
           "-=0.35"
         )
-        // 8. Corner details
+        // 7. Corner details
         .fromTo(
           [scrollRef.current, rightTagRef.current, locationRef.current],
           { opacity: 0, y: 10 },
@@ -103,7 +95,6 @@ export default function Hero() {
           ease: "sine.inOut",
         });
       }
-      // Note: Mouse parallax on background and portrait has been disabled per user request
     },
     { scope: containerRef }
   );
@@ -135,35 +126,16 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── MULTI-LAYER ARTWORK (STILL - NO MOUSE MOVEMENT) ── */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-        {/* Layer 1: Background Yellow Energy / Art blast (Static) */}
+      {/* ── MULTI-LAYER ARTWORK WITH INTERACTIVE WEBGL PIXEL SHADER ── */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+        {/* Interactive WebGL Pixelation Canvas (Cursor radius effect) */}
         <div
-          ref={bgLayerRef}
-          className="absolute inset-0 w-full h-full"
+          ref={artLayerRef}
+          className="absolute inset-0 w-full h-full pointer-events-auto z-10"
         >
-          <Image
-            src="/bg.png"
-            alt="Art blast background"
-            fill
-            priority
-            sizes="100vw"
-            className="object-contain object-right lg:object-center select-none"
-          />
-        </div>
-
-        {/* Layer 2: Cutout Portrait Layer (Static) */}
-        <div
-          ref={meLayerRef}
-          className="absolute inset-0 w-full h-full z-10"
-        >
-          <Image
-            src="/me.png"
-            alt="Naren Roy Portrait"
-            fill
-            priority
-            sizes="100vw"
-            className="object-contain object-right lg:object-center select-none"
+          <PixelShaderCanvas
+            bgSrc="/bg.png"
+            meSrc="/me.png"
           />
         </div>
 
@@ -174,7 +146,7 @@ export default function Hero() {
       {/* ── TOP NAVIGATION ── */}
       <header
         ref={navRef}
-        className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pt-6 sm:pt-8 flex items-center justify-between"
+        className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pt-6 sm:pt-8 flex items-center justify-between pointer-events-auto"
       >
         {/* Brand / Name */}
         <a
@@ -199,7 +171,7 @@ export default function Hero() {
             <a
               key={label}
               href={href}
-              className="text-xs sm:text-[13px] font-medium tracking-wide text-[#2e2c26] hover:text-black transition-colors relative py-1 group"
+              className="text-xs sm:text-[13px] font-medium tracking-wide text-[#2e2c26] hover:text-black transition-colors relative py-1 group cursor-pointer"
             >
               {label}
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black group-hover:w-full transition-all duration-200" />
@@ -209,8 +181,8 @@ export default function Hero() {
       </header>
 
       {/* ── MAIN CONTENT (LEFT COLUMN) ── */}
-      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 py-8 md:py-6">
-        <div className="w-full max-w-xl lg:max-w-2xl flex flex-col">
+      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 py-8 md:py-6 pointer-events-none">
+        <div className="w-full max-w-xl lg:max-w-2xl flex flex-col pointer-events-auto">
           {/* Eyebrow */}
           <div ref={eyebrowRef} className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-5">
             <span className="w-8 sm:w-11 h-[1.5px] bg-[#1c1b18]/70" />
@@ -219,7 +191,7 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Main Display Headline (Authentic Brushed Ink Typography) */}
+          {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
           <div ref={headlineRef} className="mb-4 sm:mb-6">
             <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
 
@@ -279,7 +251,7 @@ export default function Hero() {
                 href="https://www.linkedin.com/in/naren-roy-4390a6238/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1 rounded hover:bg-black/5 hover:text-[#0a66c2] transition-colors"
+                className="p-1 rounded hover:bg-black/5 hover:text-[#0a66c2] transition-colors cursor-pointer"
                 aria-label="Naren Roy LinkedIn profile"
                 title="LinkedIn Profile"
               >
@@ -289,7 +261,7 @@ export default function Hero() {
                 href="https://github.com/CyberSparkx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1 rounded hover:bg-black/5 hover:text-black transition-colors"
+                className="p-1 rounded hover:bg-black/5 hover:text-black transition-colors cursor-pointer"
                 aria-label="Naren Roy GitHub profile"
                 title="GitHub Profile"
               >
@@ -315,12 +287,12 @@ export default function Hero() {
       </div>
 
       {/* ── FOOTER / FOLD ACCENTS ── */}
-      <div className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pb-6 sm:pb-8 flex items-end justify-between">
+      <div className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pb-6 sm:pb-8 flex items-end justify-between pointer-events-none">
         {/* Bottom Left: Scroll To Explore */}
         <a
           ref={scrollRef}
           href="#about"
-          className="group flex flex-col items-start gap-1 cursor-pointer"
+          className="group flex flex-col items-start gap-1 cursor-pointer pointer-events-auto"
           aria-label="Scroll down to explore about section"
         >
           <div
@@ -337,7 +309,7 @@ export default function Hero() {
         {/* Bottom Right: Siliguri, India */}
         <div
           ref={locationRef}
-          className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#1c1b18] md:text-[#f8f5ee]"
+          className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#1c1b18] md:text-[#f8f5ee] pointer-events-auto"
         >
           <span className="w-2 h-2 rounded-full bg-[#f5be0b] shadow-[0_0_8px_#f5be0b] shrink-0" />
           <span>SILIGURI, INDIA</span>
