@@ -10,7 +10,7 @@ import PixelShaderCanvas from "./PixelShaderCanvas";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const artLayerRef = useRef<HTMLDivElement>(null);
-  const staticArtRef = useRef<HTMLDivElement>(null);
+  const mobileArtRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
@@ -36,19 +36,24 @@ export default function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // 1. Entrance animation for artwork (desktop WebGL and mobile static)
+      const targets = [artLayerRef.current, mobileArtRef.current].filter(Boolean);
+
+      // 1. Entrance animation for artwork
+      if (targets.length > 0) {
+        tl.fromTo(
+          targets,
+          { opacity: 0, scale: 1.03 },
+          { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
+        );
+      }
+
+      // 2. Navigation header
       tl.fromTo(
-        [artLayerRef.current, staticArtRef.current],
-        { opacity: 0, scale: 1.03 },
-        { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
+        navRef.current,
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7 },
+        "-=0.7"
       )
-        // 2. Navigation header
-        .fromTo(
-          navRef.current,
-          { y: -20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7 },
-          "-=0.7"
-        )
         // 3. Eyebrow
         .fromTo(
           eyebrowRef.current,
@@ -79,7 +84,7 @@ export default function Hero() {
         )
         // 7. Corner details
         .fromTo(
-          [scrollRef.current, rightTagRef.current, locationRef.current],
+          [scrollRef.current, rightTagRef.current, locationRef.current].filter(Boolean),
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
           "-=0.3"
@@ -105,7 +110,7 @@ export default function Hero() {
     <section
       ref={containerRef}
       id="hero-section"
-      className="relative w-full min-h-[100dvh] lg:h-screen flex flex-col justify-between overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none"
+      className="relative w-full min-h-[100dvh] flex flex-col justify-between overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none"
       style={{
         fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
       }}
@@ -128,46 +133,17 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── ARTWORK LAYER: DESKTOP (WebGL) vs TAB/PHONE (Static) ── */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-        {/* Desktop WebGL Shader (Only on desktop >= 1024px, no touch overhead) */}
+      {/* ── DESKTOP BACKGROUND ARTWORK (lg: >= 1024px) ── */}
+      <div className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+        {/* Interactive WebGL Water Ripple & Pixelation Canvas */}
         <div
           ref={artLayerRef}
-          className="hidden lg:block absolute inset-0 w-full h-full pointer-events-auto z-10"
+          className="absolute inset-0 w-full h-full pointer-events-auto z-10"
         >
           <PixelShaderCanvas
             bgSrc="/bg.png"
             meSrc="/me.png"
           />
-        </div>
-
-        {/* Mobile & Tablet Static Layers (Phone & Tab: Clean, performant, zero WebGL overhead) */}
-        <div
-          ref={staticArtRef}
-          className="lg:hidden absolute inset-0 w-full h-full z-10 pointer-events-none"
-        >
-          {/* Background Yellow Energy */}
-          <div className="absolute inset-0 w-full h-full">
-            <Image
-              src="/bg.png"
-              alt="Art blast background"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-contain object-right sm:object-center select-none"
-            />
-          </div>
-          {/* Cutout Portrait Layer */}
-          <div className="absolute inset-0 w-full h-full">
-            <Image
-              src="/me.png"
-              alt="Naren Roy Portrait"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-contain object-right sm:object-center select-none"
-            />
-          </div>
         </div>
 
         {/* Paper texture grain overlay */}
@@ -211,11 +187,11 @@ export default function Hero() {
         </nav>
       </header>
 
-      {/* ── MAIN CONTENT (LEFT COLUMN) ── */}
-      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-14 lg:px-16 py-6 sm:py-8 pointer-events-none">
+      {/* ── MAIN CONTENT AREA ── */}
+      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-14 lg:px-16 py-4 sm:py-6 lg:py-8 pointer-events-none">
         <div className="w-full max-w-xl lg:max-w-2xl flex flex-col pointer-events-auto">
           {/* Eyebrow */}
-          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-4">
+          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
             <span className="w-6 sm:w-10 h-[1.5px] bg-[#1c1b18]/70" />
             <span className="text-[9px] sm:text-[11px] md:text-xs font-bold tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#47443c]">
               FULL STACK SOFTWARE DEVELOPER
@@ -223,14 +199,44 @@ export default function Hero() {
           </div>
 
           {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
-          <div ref={headlineRef} className="mb-3.5 sm:mb-5">
+          <div ref={headlineRef} className="mb-2 sm:mb-4">
             <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
 
             <div className="relative inline-block select-none">
               <img
                 src="/naren-roy-title.png"
                 alt="Naren Roy"
-                className="w-[230px] sm:w-[340px] md:w-[420px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
+                className="w-[210px] xs:w-[250px] sm:w-[340px] md:w-[420px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
+              />
+            </div>
+          </div>
+
+          {/* ── MOBILE & TABLET DEDICATED ARTWORK SHOWCASE (lg:hidden) ── */}
+          {/* Sits cleanly between headline and details - ZERO text overlap over face */}
+          <div
+            ref={mobileArtRef}
+            className="lg:hidden relative w-full max-w-[320px] sm:max-w-[420px] aspect-[4/3] mx-auto my-3 sm:my-5 overflow-hidden rounded-xl"
+          >
+            {/* Background Yellow Energy */}
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src="/bg.png"
+                alt="Yellow energy explosion"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain object-center select-none"
+              />
+            </div>
+            {/* Cutout Portrait */}
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src="/me.png"
+                alt="Naren Roy Portrait"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain object-center select-none"
               />
             </div>
           </div>
@@ -238,7 +244,7 @@ export default function Hero() {
           {/* Contact Bar */}
           <div
             ref={contactRef}
-            className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-4 sm:mb-6"
+            className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-3.5 sm:mb-5"
           >
             {/* Phone */}
             <a
