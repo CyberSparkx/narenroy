@@ -4,8 +4,13 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Phone, Mail, Linkedin, Github, Check, FileText } from "lucide-react";
 import PixelShaderCanvas from "./PixelShaderCanvas";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,6 +110,52 @@ export default function Hero() {
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
+        });
+      }
+
+      // Smooth Creative Scroll Exit Parallax & Dissolve
+      if (desktopArtRef.current) {
+        gsap.to(desktopArtRef.current, {
+          yPercent: 12,
+          opacity: 0.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        });
+      }
+
+      if (mobileArtRef.current) {
+        gsap.to(mobileArtRef.current, {
+          y: 24,
+          opacity: 0.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        });
+      }
+
+      // Hero text subtle float-up on scroll
+      const textGroup = [eyebrowRef.current, headlineRef.current, contactRef.current, quoteRef.current].filter(Boolean);
+      if (textGroup.length > 0) {
+        gsap.to(textGroup, {
+          y: -25,
+          opacity: 0.25,
+          stagger: 0.02,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "30% top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
         });
       }
     },
@@ -226,7 +277,13 @@ export default function Hero() {
       </header>
 
       {/* ── DESKTOP FULL-BLEED ARTWORK WITH INTERACTIVE WEBGL SHADER (Desktop Only: lg:block) ── */}
-      <div className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+      <div 
+        className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+        style={{
+          maskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.3) 80%, transparent 94%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.3) 80%, transparent 94%)",
+        }}
+      >
         <div
           ref={desktopArtRef}
           className="absolute inset-0 w-full h-full pointer-events-auto z-10"
@@ -237,6 +294,11 @@ export default function Hero() {
           />
         </div>
       </div>
+
+      {/* ── Seamless Parchment Feathering at Fold (Soft Ink Bleed into About) ── */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-44 sm:h-56 md:h-72 bg-gradient-to-b from-transparent via-[#E6E2D7]/65 via-60% to-[#E6E2D7] pointer-events-none z-20"
+      />
 
       {/* ── MAIN CONTENT (LEFT COLUMN ON DESKTOP, VERTICAL FLOW ON TABLET & MOBILE) ── */}
       <div className="hero-main-row relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-10 lg:px-16 py-3 md:py-4 lg:py-6 my-auto pointer-events-none">
@@ -268,6 +330,10 @@ export default function Hero() {
           <div
             ref={mobileArtRef}
             className="hero-portrait-art lg:hidden relative w-full max-w-[290px] sm:max-w-[340px] md:max-w-[540px] aspect-[4/3] md:aspect-[16/11] mx-auto my-2.5 sm:my-4 md:my-6 overflow-hidden rounded-xl"
+            style={{
+              maskImage: "linear-gradient(to bottom, black 0%, black 72%, rgba(0,0,0,0.5) 86%, transparent 98%)",
+              WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 72%, rgba(0,0,0,0.5) 86%, transparent 98%)",
+            }}
           >
             <div className="absolute inset-0 w-full h-full">
               <Image

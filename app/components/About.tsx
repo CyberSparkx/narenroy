@@ -62,12 +62,25 @@ export default function About() {
         defaults: { ease: "power3.out" },
       });
 
-      // 1. Line expansion
+      // 0. Conduit bridge line & tag
       tl.fromTo(
-        ".about-rule",
-        { scaleX: 0, transformOrigin: "left" },
-        { scaleX: 1, duration: 0.85, ease: "power2.inOut", stagger: 0.1 }
+        ".about-conduit-line",
+        { scaleY: 0, transformOrigin: "top" },
+        { scaleY: 1, duration: 0.6, ease: "power2.out" }
       )
+        .fromTo(
+          ".about-conduit",
+          { opacity: 0, y: -8 },
+          { opacity: 1, y: 0, duration: 0.5 },
+          "-=0.4"
+        )
+        // 1. Line expansion
+        .fromTo(
+          ".about-rule",
+          { scaleX: 0, transformOrigin: "left" },
+          { scaleX: 1, duration: 0.85, ease: "power2.inOut", stagger: 0.1 },
+          "-=0.3"
+        )
         // 2. Section tag & eyebrow
         .fromTo(
           ".about-tag",
@@ -104,7 +117,7 @@ export default function About() {
     <section
       ref={containerRef}
       id="about"
-      className="relative w-full overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none py-20 sm:py-28 md:py-36 border-t border-[#1c1b18]/10"
+      className="relative w-full overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none pt-12 pb-24 sm:pt-20 sm:pb-32 md:pt-28 md:pb-40"
       style={{
         fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
       }}
@@ -142,6 +155,15 @@ export default function About() {
       {/* ── Texture Overlay ── */}
       <div className="absolute inset-0 w-full h-full about-paper-grain opacity-25 mix-blend-multiply pointer-events-none z-10" />
 
+      {/* ── Seamless Atmospheric Fold Glow (Connecting Hero & About) ── */}
+      <div
+        className="absolute -top-40 left-1/3 w-[640px] h-[360px] opacity-20 pointer-events-none z-0"
+        style={{
+          background: "radial-gradient(ellipse at center, rgba(245, 190, 11, 0.45) 0%, rgba(230, 226, 215, 0.1) 50%, transparent 75%)",
+          filter: "blur(70px)",
+        }}
+      />
+
       {/* ── Subtle Atmospheric Yellow Brush Accent in Background ── */}
       <div
         className="absolute top-1/4 right-0 w-[500px] h-[500px] opacity-15 pointer-events-none -mr-48 z-0"
@@ -153,10 +175,19 @@ export default function About() {
 
       <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
         
+        {/* ── CREATIVE TRANSITION CONDUIT (HERO → ABOUT CONTINUITY) ── */}
+        <div className="about-conduit flex items-center gap-3 mb-6 sm:mb-10">
+          <div className="about-conduit-line w-[1.5px] h-7 sm:h-10 bg-gradient-to-b from-[#1c1b18]/60 via-[#f5be0b] to-[#1c1b18]/15" />
+          <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono tracking-[0.22em] uppercase text-[#615c50]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#f5be0b]" />
+            <span>DISPATCH // 01 · SYSTEM IDENTITY</span>
+          </div>
+        </div>
+
         {/* ── SECTION HEADER & EYEBROW ── */}
         <div className="flex flex-col gap-3 mb-12 sm:mb-16 md:mb-20">
           <div className="about-tag flex items-center gap-3">
-            <span className="w-8 sm:w-12 h-[1.5px] bg-[#1c1b18]/70" />
+            <span className="about-rule w-8 sm:w-12 h-[1.5px] bg-[#1c1b18]/70" />
             <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#47443c]">
               01 // WHO I AM — THE PHILOSOPHY
             </span>
