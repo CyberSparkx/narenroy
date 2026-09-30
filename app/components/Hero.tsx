@@ -227,7 +227,7 @@ export default function Hero() {
               <img
                 src="/naren-roy-title.png"
                 alt="Naren Roy"
-                className="w-[290px] sm:w-[370px] md:w-[440px] lg:w-[490px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)]"
+                className="w-[290px] sm:w-[370px] md:w-[440px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
               />
             </div>
           </div>
