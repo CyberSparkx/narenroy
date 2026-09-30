@@ -29,7 +29,7 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       }
     `;
 
-    // Fragment Shader with cursor-radius pixelation
+    // Fragment Shader: High-density micro-pixels + liquid water ripple refraction
     const fsSource = `
       precision highp float;
       uniform sampler2D uBg;
@@ -38,6 +38,7 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       uniform float uHover;
       uniform vec2 uResolution;
       uniform vec2 uTextureSize;
+      uniform float uTime;
       varying vec2 vUv;
 
       // Fit texture inside canvas with 'contain' mode (object-contain object-right)
@@ -48,13 +49,11 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
         vec2 offset = vec2(0.0);
 
         if (containerAspect > texAspect) {
-          // Container is wider than texture -> aligned right / center
           scale.x = texAspect / containerAspect;
-          offset.x = 1.0 - scale.x; // Align to right
+          offset.x = 1.0 - scale.x; // Align right
         } else {
-          // Container is taller than texture -> aligned center
           scale.y = containerAspect / texAspect;
-          offset.y = (1.0 - scale.y) * 0.5;
+          offset.y = (1.0 - scale.y) * 0.5; // Center vertically
         }
 
         return (uv - offset) / scale;
@@ -62,42 +61,71 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
 
       void main() {
         vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
-        float dist = length((vUv - uMouse) * aspect);
+        vec2 delta = (vUv - uMouse) * aspect;
+        float dist = length(delta);
 
-        // Pixelation effect radius (~140px in screen aspect)
-        float radius = 0.16;
-        float strength = smoothstep(radius, radius * 0.35, dist) * uHover;
+        // Interaction radius around cursor (~200px equivalent)
+        float radius = 0.22;
+        float influence = smoothstep(radius, 0.02, dist) * uHover;
 
-        // Pixel block density inside the interaction zone
-        float pixelBlocks = 42.0;
-        vec2 pixelGrid = vec2(pixelBlocks * aspect.x, pixelBlocks);
-        vec2 pixelatedUv = (floor(vUv * pixelGrid) + 0.5) / pixelGrid;
+        // ── 1. Liquid Water Ripple Dynamics ──
+        // Concentric ripples radiating outward
+        float rippleFreq = 36.0;
+        float rippleSpeed = 5.5;
+        float wave = sin(dist * rippleFreq - uTime * rippleSpeed);
+        
+        // Attenuate wave height based on distance & hover
+        float waveHeight = 0.014 * influence;
+        vec2 rippleDir = dist > 0.0005 ? normalize(delta) : vec2(0.0);
+        
+        // Displace coordinates with water wave
+        vec2 waterUv = vUv + rippleDir * (wave * waveHeight);
 
-        vec2 sampleUv = mix(vUv, pixelatedUv, strength);
+        // ── 2. Fine High-Density Micro-Pixels ──
+        // High density (130 blocks) so pixels feel refined, sleek, and delicate
+        float pixelDensity = 135.0;
+        vec2 pixelGrid = vec2(pixelDensity * aspect.x, pixelDensity);
+        vec2 pixelatedUv = (floor(waterUv * pixelGrid) + 0.5) / pixelGrid;
 
-        // Map to texture UV space
-        vec2 texUv = getContainedUv(sampleUv, uResolution, uTextureSize);
+        // Shimmering blend between liquid ripple and fine micro-pixels
+        float pixelStrength = influence * (0.60 + 0.40 * max(0.0, wave));
+        vec2 finalUv = mix(waterUv, pixelatedUv, pixelStrength * 0.85);
 
-        // Check if inside texture boundaries
+        // Map to texture space
+        vec2 texUv = getContainedUv(finalUv, uResolution, uTextureSize);
+
+        // Outside texture boundaries -> transparent
         if (texUv.x < 0.0 || texUv.x > 1.0 || texUv.y < 0.0 || texUv.y > 1.0) {
           gl_FragColor = vec4(0.0);
           return;
         }
 
+        // ── 3. Chromatic Liquid Refraction & Caustics ──
+        float chromaticDispersion = waveHeight * 0.40;
+        vec2 rTexUv = getContainedUv(finalUv + rippleDir * chromaticDispersion, uResolution, uTextureSize);
+        vec2 bTexUv = getContainedUv(finalUv - rippleDir * chromaticDispersion, uResolution, uTextureSize);
+
         vec4 bg = texture2D(uBg, texUv);
         vec4 me = texture2D(uMe, texUv);
-
-        // Layer subject (me) over background (bg)
         vec4 color = vec4(mix(bg.rgb, me.rgb, me.a), max(bg.a, me.a));
 
-        // Subtle digital matrix micro-grid inside the pixelated circle
-        if (strength > 0.04) {
-          vec2 cell = fract(vUv * pixelGrid);
-          float gridLine = step(0.07, cell.x) * step(0.07, cell.y);
-          color.rgb = mix(color.rgb * 0.86, color.rgb, gridLine);
+        if (influence > 0.01) {
+          // Sample chromatic channels along ripple normal
+          vec4 bgR = texture2D(uBg, rTexUv);
+          vec4 meR = texture2D(uMe, rTexUv);
+          vec3 colR = mix(bgR.rgb, meR.rgb, meR.a);
 
-          // Subtle warm cyber glow on the active pixels
-          color.rgb += vec3(0.03, 0.02, 0.0) * strength;
+          vec4 bgB = texture2D(uBg, bTexUv);
+          vec4 meB = texture2D(uMe, bTexUv);
+          vec3 colB = mix(bgB.rgb, meB.rgb, meB.a);
+
+          // Subtle liquid refraction split
+          color.r = mix(color.r, colR.r, influence * 0.35);
+          color.b = mix(color.b, colB.b, influence * 0.35);
+
+          // Water surface specular sheen along ripple crests
+          float crest = pow(max(0.0, wave), 3.0) * influence;
+          color.rgb += vec3(1.0, 0.94, 0.82) * (crest * 0.22);
         }
 
         gl_FragColor = color;
@@ -151,6 +179,7 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
     const uHoverLoc = gl.getUniformLocation(program, "uHover");
     const uResolutionLoc = gl.getUniformLocation(program, "uResolution");
     const uTextureSizeLoc = gl.getUniformLocation(program, "uTextureSize");
+    const uTimeLoc = gl.getUniformLocation(program, "uTime");
 
     // Load textures
     function loadTexture(src: string, textureUnit: number) {
@@ -159,7 +188,6 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       gl.activeTexture(textureUnit);
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
-      // Temporary 1x1 transparent pixel while loading
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
@@ -204,6 +232,7 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
     let currentHover = 0.0;
     let targetHover = 0.0;
     let animId = 0;
+    const startTime = performance.now();
 
     function handleMouseMove(e: MouseEvent) {
       if (!canvas) return;
@@ -211,7 +240,7 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
 
-      // Only activate when hovering over the right half where the image/person is
+      // Active over the right 65% area where the portrait & yellow energy are
       if (x > 0.35 && x <= 1.0 && y >= 0.0 && y <= 1.0) {
         mouse.x = x;
         mouse.y = y;
@@ -245,13 +274,16 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
       if (!gl || !canvas) return;
       resize();
 
-      // Smooth hover interpolation
-      currentHover += (targetHover - currentHover) * 0.12;
+      // Smooth hover fade in/out
+      currentHover += (targetHover - currentHover) * 0.10;
+
+      const elapsed = (performance.now() - startTime) * 0.001;
 
       gl.useProgram(program);
       gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
       gl.uniform2f(uMouseLoc, mouse.x, mouse.y);
       gl.uniform1f(uHoverLoc, currentHover);
+      gl.uniform1f(uTimeLoc, elapsed);
 
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
