@@ -43,18 +43,10 @@ const DISCIPLINES = [
   },
 ];
 
-const METRICS = [
-  { value: "03+", label: "Years of Craft", detail: "Dedicated engineering" },
-  { value: "15+", label: "Projects Shipped", detail: "Web, mobile & 3D apps" },
-  { value: "60 FPS", label: "Frame Budget", detail: "Silky smooth performance" },
-  { value: "100%", label: "Obsession with Detail", detail: "Every micro-interaction" },
-];
-
 export default function About() {
   const containerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const metricsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -103,13 +95,6 @@ export default function About() {
           { y: 30, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.65, stagger: 0.12, ease: "power2.out" },
           "-=0.4"
-        )
-        // 6. Metrics ledger
-        .fromTo(
-          ".about-metric-item",
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
-          "-=0.3"
         );
     },
     { scope: containerRef }
@@ -285,33 +270,6 @@ export default function About() {
             </div>
           </div>
 
-        </div>
-
-        {/* ── METRICS LEDGER RIBBON ── */}
-        <div
-          ref={metricsRef}
-          className="w-full pt-10 sm:pt-14 border-t border-[#1c1b18]/15"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
-            {METRICS.map((m) => (
-              <div
-                key={m.label}
-                className="about-metric-item flex flex-col gap-1.5 group cursor-default"
-              >
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#1c1b18] group-hover:text-[#d97706] transition-colors">
-                    {m.value}
-                  </span>
-                </div>
-                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#1c1b18]">
-                  {m.label}
-                </span>
-                <span className="text-[11px] text-[#5a554a] font-normal">
-                  {m.detail}
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
 
       </div>
