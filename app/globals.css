@@ -41,22 +41,19 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom scrollbar */
+/* Hide scrollbar — Chrome, Safari, Edge */
 ::-webkit-scrollbar {
-  width: 8px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Hide scrollbar — Firefox */
+* {
+  scrollbar-width: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--foreground) / 0.2);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #22c55e;
+/* Hide scrollbar — IE / old Edge */
+body {
+  -ms-overflow-style: none;
 }
 
 canvas {

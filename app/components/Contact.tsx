@@ -18,6 +18,8 @@ import {
   FileText,
   Clock,
   Sparkles,
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 
 if (typeof window !== "undefined") {
@@ -68,6 +70,7 @@ export default function Contact() {
   });
   const [isSent, setIsSent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -75,22 +78,50 @@ export default function Contact() {
     setTimeout(() => setCopiedText(null), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Construct mailto link fallback for instant connection
+  const openMailtoFallback = () => {
     const mailtoUrl = `mailto:narensarkar607@gmail.com?subject=${encodeURIComponent(
       formState.subject || `Inquiry from ${formState.name}`
     )}&body=${encodeURIComponent(
       `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`
     )}`;
+    window.location.href = mailtoUrl;
+  };
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to dispatch message.");
+      }
+
       setIsSent(true);
-      window.location.href = mailtoUrl;
-    }, 600);
+      setFormState({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err: unknown) {
+      console.error("Submission error:", err);
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Failed to dispatch message through server.";
+      setErrorMessage(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useGSAP(
