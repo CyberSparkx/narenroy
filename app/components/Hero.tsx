@@ -9,7 +9,8 @@ import PixelShaderCanvas from "./PixelShaderCanvas";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const artLayerRef = useRef<HTMLDivElement>(null);
+  const desktopArtRef = useRef<HTMLDivElement>(null);
+  const tabletArtRef = useRef<HTMLDivElement>(null);
   const mobileArtRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,11 @@ export default function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      const targets = [artLayerRef.current, mobileArtRef.current].filter(Boolean);
+      const targets = [
+        desktopArtRef.current,
+        tabletArtRef.current,
+        mobileArtRef.current,
+      ].filter(Boolean);
 
       // 1. Entrance animation for artwork
       if (targets.length > 0) {
@@ -110,7 +115,7 @@ export default function Hero() {
     <section
       ref={containerRef}
       id="hero-section"
-      className="relative w-full min-h-[100dvh] flex flex-col justify-between overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none"
+      className="relative w-full min-h-[100dvh] md:h-screen md:min-h-[660px] flex flex-col justify-between overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none"
       style={{
         fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
       }}
@@ -133,27 +138,13 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── DESKTOP BACKGROUND ARTWORK (lg: >= 1024px) ── */}
-      <div className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-        {/* Interactive WebGL Water Ripple & Pixelation Canvas */}
-        <div
-          ref={artLayerRef}
-          className="absolute inset-0 w-full h-full pointer-events-auto z-10"
-        >
-          <PixelShaderCanvas
-            bgSrc="/bg.png"
-            meSrc="/me.png"
-          />
-        </div>
-
-        {/* Paper texture grain overlay */}
-        <div className="absolute inset-0 w-full h-full paper-grain opacity-25 mix-blend-multiply pointer-events-none z-20" />
-      </div>
+      {/* ── Paper texture grain overlay (entire fold) ── */}
+      <div className="absolute inset-0 w-full h-full paper-grain opacity-25 mix-blend-multiply pointer-events-none z-10" />
 
       {/* ── TOP NAVIGATION ── */}
       <header
         ref={navRef}
-        className="relative z-30 w-full px-4 sm:px-8 md:px-14 lg:px-16 pt-5 sm:pt-6 md:pt-8 flex items-center justify-between pointer-events-auto"
+        className="relative z-30 w-full px-4 sm:px-8 md:px-10 lg:px-16 pt-5 sm:pt-6 md:pt-7 flex items-center justify-between shrink-0"
       >
         {/* Brand / Name */}
         <a
@@ -168,7 +159,7 @@ export default function Hero() {
         </a>
 
         {/* Nav Links */}
-        <nav aria-label="Hero navigation" className="flex items-center gap-3.5 sm:gap-6 md:gap-8 lg:gap-11">
+        <nav aria-label="Hero navigation" className="flex items-center gap-3 sm:gap-6 md:gap-8 lg:gap-11">
           {[
             { label: "about", href: "#about" },
             { label: "projects", href: "#projects" },
@@ -187,55 +178,54 @@ export default function Hero() {
         </nav>
       </header>
 
-      {/* ── MAIN CONTENT AREA ── */}
-      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-14 lg:px-16 py-4 sm:py-6 lg:py-8 pointer-events-none">
-        <div className="w-full max-w-xl lg:max-w-2xl flex flex-col pointer-events-auto">
+      {/* ── MAIN CONTENT: RESPONSIVE TWO-COLUMN (Tablet/Desktop) & STACK (Mobile) ── */}
+      <div className="relative z-30 w-full flex-1 flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-10 lg:px-16 py-3 md:py-4 gap-4 md:gap-6 lg:gap-8 my-auto">
+        
+        {/* ── LEFT COLUMN: TYPOGRAPHY, BIO & CONTACT DETAILS ── */}
+        <div className="w-full md:w-[48%] lg:w-[45%] flex flex-col justify-center shrink-0">
           {/* Eyebrow */}
-          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2.5">
             <span className="w-6 sm:w-10 h-[1.5px] bg-[#1c1b18]/70" />
-            <span className="text-[9px] sm:text-[11px] md:text-xs font-bold tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#47443c]">
+            <span className="text-[9px] sm:text-[10px] md:text-xs font-bold tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#47443c]">
               FULL STACK SOFTWARE DEVELOPER
             </span>
           </div>
 
           {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
-          <div ref={headlineRef} className="mb-2 sm:mb-4">
+          <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-4">
             <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
 
             <div className="relative inline-block select-none">
               <img
                 src="/naren-roy-title.png"
                 alt="Naren Roy"
-                className="w-[210px] xs:w-[250px] sm:w-[340px] md:w-[420px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
+                className="w-[210px] xs:w-[250px] sm:w-[320px] md:w-[360px] lg:w-[450px] xl:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
               />
             </div>
           </div>
 
-          {/* ── MOBILE & TABLET DEDICATED ARTWORK SHOWCASE (lg:hidden) ── */}
-          {/* Sits cleanly between headline and details - ZERO text overlap over face */}
+          {/* ── MOBILE-ONLY ARTWORK SHOWCASE (Hidden on Tablet & Desktop) ── */}
           <div
             ref={mobileArtRef}
-            className="lg:hidden relative w-full max-w-[320px] sm:max-w-[420px] aspect-[4/3] mx-auto my-3 sm:my-5 overflow-hidden rounded-xl"
+            className="md:hidden relative w-full max-w-[290px] sm:max-w-[340px] aspect-[4/3] mx-auto my-2.5 overflow-hidden rounded-xl"
           >
-            {/* Background Yellow Energy */}
             <div className="absolute inset-0 w-full h-full">
               <Image
                 src="/bg.png"
-                alt="Yellow energy explosion"
+                alt="Yellow energy art"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain object-center select-none"
               />
             </div>
-            {/* Cutout Portrait */}
             <div className="absolute inset-0 w-full h-full">
               <Image
                 src="/me.png"
                 alt="Naren Roy Portrait"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain object-center select-none"
               />
             </div>
@@ -244,7 +234,7 @@ export default function Hero() {
           {/* Contact Bar */}
           <div
             ref={contactRef}
-            className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-3.5 sm:mb-5"
+            className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-3 sm:mb-4 md:mb-5"
           >
             {/* Phone */}
             <a
@@ -310,7 +300,7 @@ export default function Hero() {
           {/* Bio Quote Block */}
           <div
             ref={quoteRef}
-            className="flex items-stretch gap-2.5 sm:gap-3.5 max-w-sm sm:max-w-md lg:max-w-lg select-text"
+            className="flex items-stretch gap-2.5 sm:gap-3 max-w-sm sm:max-w-md lg:max-w-lg select-text"
           >
             {/* Yellow Accent Bar */}
             <div className="w-[3px] rounded-full bg-[#f3b413] shrink-0" />
@@ -321,10 +311,54 @@ export default function Hero() {
             </p>
           </div>
         </div>
+
+        {/* ── RIGHT COLUMN: TABLET & DESKTOP ARTWORK SHOWCASE (md:flex) ── */}
+        <div className="hidden md:flex flex-1 items-center justify-center md:justify-end h-[360px] md:h-[440px] lg:h-[500px] xl:h-[560px] relative w-full overflow-hidden">
+          
+          {/* Tablet Static Artwork (768px - 1023px): Perfectly contained, Zero WebGL overhead, Zero overlap */}
+          <div
+            ref={tabletArtRef}
+            className="md:block lg:hidden relative w-full h-full"
+          >
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src="/bg.png"
+                alt="Yellow energy art"
+                fill
+                priority
+                sizes="(max-width: 1024px) 50vw, 40vw"
+                className="object-contain object-right select-none"
+              />
+            </div>
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src="/me.png"
+                alt="Naren Roy Portrait"
+                fill
+                priority
+                sizes="(max-width: 1024px) 50vw, 40vw"
+                className="object-contain object-right select-none"
+              />
+            </div>
+          </div>
+
+          {/* Desktop Interactive WebGL Water Ripple & Pixel Shader Canvas (>= 1024px) */}
+          <div
+            ref={desktopArtRef}
+            className="hidden lg:block relative w-full h-full pointer-events-auto"
+          >
+            <PixelShaderCanvas
+              bgSrc="/bg.png"
+              meSrc="/me.png"
+            />
+          </div>
+
+        </div>
+
       </div>
 
       {/* ── FOOTER / FOLD ACCENTS ── */}
-      <div className="relative z-30 w-full px-4 sm:px-8 md:px-14 lg:px-16 pb-4 sm:pb-6 md:pb-8 flex items-end justify-between pointer-events-none">
+      <footer className="relative z-30 w-full px-4 sm:px-8 md:px-10 lg:px-16 pb-4 sm:pb-5 md:pb-6 flex items-end justify-between shrink-0">
         {/* Bottom Left: Scroll To Explore */}
         <a
           ref={scrollRef}
@@ -352,12 +386,12 @@ export default function Hero() {
           <span>SILIGURI, INDIA</span>
           <span className="w-5 sm:w-7 md:w-10 h-[1.5px] bg-current opacity-60 shrink-0" />
         </div>
-      </div>
+      </footer>
 
-      {/* ── DESKTOP RIGHT-EDGE ACCENT (CODE ANIMATE CREATE) ── */}
+      {/* ── ULTRA-WIDE DESKTOP RIGHT-EDGE ACCENT (CODE ANIMATE CREATE) ── */}
       <div
         ref={rightTagRef}
-        className="hidden lg:flex absolute right-14 xl:right-16 top-48 flex-col items-start gap-1 text-[11px] font-bold tracking-[0.22em] uppercase text-[#2c2a24] select-none z-30 pointer-events-none"
+        className="hidden 2xl:flex absolute right-10 top-48 flex-col items-start gap-1 text-[11px] font-bold tracking-[0.22em] uppercase text-[#2c2a24] select-none z-30 pointer-events-none"
       >
         <span>CODE</span>
         <span>ANIMATE</span>
