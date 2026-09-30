@@ -22,17 +22,20 @@ export default function Navbar() {
 
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [scrolled,  setScrolled]  = useState(false);
-  const [navHidden, setNavHidden] = useState(false);
+  const [navHidden, setNavHidden] = useState(true);
   const lastScrollY = useRef(0);
 
-  /* ── Scroll: glass depth + hide on scroll down ── */
+  /* ── Scroll: hide at top (hero has native nav), show on scroll down ── */
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 30);
-      setNavHidden(y > lastScrollY.current && y > 100);
+      const isScrolled = y > 80;
+      setScrolled(isScrolled);
+      setNavHidden(!isScrolled || (y > lastScrollY.current && y > 160));
       lastScrollY.current = y;
     };
+    // Run once on mount to set initial state
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -103,20 +106,20 @@ export default function Navbar() {
         ref={navRef}
         aria-label="Main navigation"
         className="fixed top-0 left-0 right-0 z-50 transition-transform duration-500 will-change-transform"
-        style={{ transform: navHidden ? "translateY(-110%)" : "translateY(0)" }}
+        style={{ transform: (!scrolled || navHidden) ? "translateY(-130%)" : "translateY(0)" }}
       >
         {/* ── Main floating bar ── */}
         <div
           className="mx-3 mt-3 sm:mx-5 sm:mt-4 md:mx-8 lg:mx-12 rounded-2xl px-4 sm:px-5 py-3 flex items-center justify-between gap-4 transition-all duration-500"
           style={{
             background: scrolled
-              ? "rgba(22, 78, 210, 0.65)"
-              : "rgba(255, 255, 255, 0.10)",
+              ? "rgba(18, 18, 22, 0.85)"
+              : "rgba(18, 18, 22, 0.65)",
             backdropFilter:       "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.22)",
+            border: "1px solid rgba(255, 255, 255, 0.14)",
             boxShadow: scrolled
-              ? "0 8px 40px rgba(15, 50, 180, 0.25), inset 0 1px 0 rgba(255,255,255,0.15)"
+              ? "0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.15)"
               : "inset 0 1px 0 rgba(255,255,255,0.10)",
           }}
         >

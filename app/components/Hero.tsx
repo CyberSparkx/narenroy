@@ -1,232 +1,396 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
-const SKILLS = [
-  { num: "01.", label: "React & Next.js"   },
-  { num: "02.", label: "GSAP Animation"    },
-  { num: "03.", label: "TypeScript"        },
-  { num: "04.", label: "Three.js / R3F"   },
-  { num: "05.", label: "Node.js / Express" },
-  { num: "06.", label: "IoT & Arduino"     },
-];
-
-const HeroIllustration = () => (
-  <svg viewBox="0 0 480 520" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden>
-    <ellipse cx="240" cy="490" rx="130" ry="18" fill="#1a3a8f" fillOpacity="0.25" />
-    {/* Chair */}
-    <rect x="148" y="370" width="14" height="100" rx="7" fill="#1a3aff" />
-    <rect x="318" y="370" width="14" height="100" rx="7" fill="#1a3aff" />
-    <rect x="120" y="440" width="240" height="14" rx="7" fill="#1a3aff" />
-    <rect x="110" y="330" width="260" height="55" rx="20" fill="#1a3aff" />
-    <rect x="148" y="200" width="14" height="145" rx="7" fill="#1a3aff" />
-    <rect x="318" y="200" width="14" height="145" rx="7" fill="#1a3aff" />
-    <rect x="130" y="195" width="220" height="60" rx="18" fill="#1a3aff" />
-    {/* Body */}
-    <rect x="176" y="250" width="128" height="90" rx="28" fill="#ffd166" />
-    <path d="M200 295 Q240 315 280 295" stroke="#e6b800" strokeWidth="3" fill="none" strokeLinecap="round" />
-    {/* Head */}
-    <circle cx="240" cy="200" r="62" fill="#ffd166" />
-    <path d="M178 185 Q185 130 240 125 Q295 130 302 185" fill="#1a1a2e" />
-    <path d="M178 185 Q170 160 182 148" stroke="#1a1a2e" strokeWidth="8" fill="none" strokeLinecap="round" />
-    <path d="M302 185 Q310 160 298 148" stroke="#1a1a2e" strokeWidth="8" fill="none" strokeLinecap="round" />
-    <ellipse cx="218" cy="198" rx="10" ry="12" fill="#1a1a2e" />
-    <ellipse cx="262" cy="198" rx="10" ry="12" fill="#1a1a2e" />
-    <circle cx="222" cy="194" r="3" fill="white" />
-    <circle cx="266" cy="194" r="3" fill="white" />
-    <path d="M224 218 Q240 232 256 218" stroke="#1a1a2e" strokeWidth="3" fill="none" strokeLinecap="round" />
-    {/* Headphones */}
-    <path d="M178 190 Q178 140 240 138 Q302 140 302 190" stroke="#1a1a2e" strokeWidth="9" fill="none" />
-    <rect x="165" y="188" width="20" height="28" rx="8" fill="#1a1a2e" />
-    <rect x="295" y="188" width="20" height="28" rx="8" fill="#1a1a2e" />
-    {/* Arms */}
-    <path d="M176 275 Q130 285 105 330" stroke="#ffd166" strokeWidth="26" strokeLinecap="round" fill="none" />
-    <path d="M304 275 Q350 285 375 330" stroke="#ffd166" strokeWidth="26" strokeLinecap="round" fill="none" />
-    {/* Left laptop */}
-    <rect x="95"  y="310" width="110" height="70" rx="10" fill="#1a1a2e" />
-    <rect x="100" y="315" width="100" height="60" rx="7"  fill="#0d0d1a" />
-    <rect x="108" y="323" width="50"  height="5"  rx="2.5" fill="#22c55e" />
-    <rect x="108" y="333" width="35"  height="5"  rx="2.5" fill="#60a5fa" />
-    <rect x="108" y="343" width="45"  height="5"  rx="2.5" fill="#fbbf24" />
-    <rect x="108" y="353" width="30"  height="5"  rx="2.5" fill="#22c55e" />
-    <rect x="88"  y="378" width="125" height="10" rx="5"  fill="#1a1a2e" />
-    {/* Right laptop */}
-    <rect x="275" y="315" width="100" height="65" rx="10" fill="#1a1a2e" />
-    <rect x="280" y="320" width="90"  height="55" rx="7"  fill="#0d0d1a" />
-    <rect x="285" y="325" width="80"  height="8"  rx="3"  fill="#1a3aff" />
-    <rect x="285" y="338" width="55"  height="4"  rx="2"  fill="#3a3a5c" />
-    <rect x="285" y="346" width="70"  height="4"  rx="2"  fill="#3a3a5c" />
-    <rect x="285" y="354" width="45"  height="4"  rx="2"  fill="#3a3a5c" />
-    <rect x="285" y="362" width="60"  height="4"  rx="2"  fill="#3a3a5c" />
-    <rect x="268" y="378" width="115" height="10" rx="5"  fill="#1a1a2e" />
-    {/* Sparkles */}
-    <circle cx="80"  cy="150" r="5" fill="white" fillOpacity="0.7" />
-    <circle cx="400" cy="120" r="7" fill="white" fillOpacity="0.5" />
-    <circle cx="430" cy="280" r="4" fill="white" fillOpacity="0.6" />
-    <circle cx="55"  cy="310" r="6" fill="white" fillOpacity="0.4" />
-    {/* Floating badges */}
-    <rect x="340" y="145" width="112" height="48" rx="12" fill="white" fillOpacity="0.15" />
-    <text x="356" y="167" fontFamily="monospace" fontSize="12" fill="white" fillOpacity="0.9">&lt;Naren /&gt;</text>
-    <text x="356" y="184" fontFamily="monospace" fontSize="10" fill="#22c55e">//frontend dev</text>
-    <rect x="18"  y="160" width="100" height="46" rx="12" fill="white" fillOpacity="0.15" />
-    <text x="30"  y="181" fontFamily="monospace" fontSize="10" fill="white" fillOpacity="0.9">GSAP ✦ React</text>
-    <text x="30"  y="197" fontFamily="monospace" fontSize="9"  fill="#fbbf24">TypeScript</text>
-  </svg>
-);
+import { Phone, Mail, Linkedin, Github, Check } from "lucide-react";
 
 export default function Hero() {
-  const containerRef    = useRef<HTMLDivElement>(null);
-  const badgeRef        = useRef<HTMLDivElement>(null);
-  const headlineRef     = useRef<HTMLHeadingElement>(null);
-  const subRef          = useRef<HTMLParagraphElement>(null);
-  const ctaRef          = useRef<HTMLDivElement>(null);
-  const illustrationRef = useRef<HTMLDivElement>(null);
-  const stripRef        = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bgLayerRef = useRef<HTMLDivElement>(null);
+  const meLayerRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const eyebrowRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const quoteRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLAnchorElement>(null);
+  const scrollLineRef = useRef<HTMLDivElement>(null);
+  const rightTagRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+  const [copiedText, setCopiedText] = useState<string | null>(null);
 
-    tl.from(badgeRef.current, { y: -20, opacity: 0, duration: 0.6, delay: 0.7 })
-      .from(headlineRef.current, { y: 50, opacity: 0, duration: 0.8 }, "-=0.3")
-      .from(subRef.current,      { y: 30, opacity: 0, duration: 0.7 }, "-=0.5")
-      .from(ctaRef.current,      { y: 24, opacity: 0, duration: 0.6 }, "-=0.5")
-      .from(illustrationRef.current, { x: 50, opacity: 0, duration: 1, ease: "expo.out" }, "-=0.8")
-      .from(
-        stripRef.current?.querySelectorAll(".skill-item") ?? [],
-        { y: 20, opacity: 0, duration: 0.5, stagger: 0.06 },
-        "-=0.5"
-      );
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(label);
+    setTimeout(() => setCopiedText(null), 2500);
+  };
 
-    // Blob float
-    gsap.to(".hero-blob", {
-      y: -12, duration: 3.5, yoyo: true, repeat: -1,
-      ease: "sine.inOut", stagger: { each: 0.7 },
-    });
+  useGSAP(
+    () => {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) return;
 
-    // Illustration float
-    gsap.to(illustrationRef.current, {
-      y: -10, duration: 4, yoyo: true, repeat: -1, ease: "sine.inOut",
-    });
-  }, { scope: containerRef });
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // 1. Background energy effect entrance
+      tl.fromTo(
+        bgLayerRef.current,
+        { opacity: 0, scale: 1.08 },
+        { opacity: 1, scale: 1, duration: 1.3, ease: "power2.out" }
+      )
+        // 2. Cutout portrait entrance (slight parallax entrance)
+        .fromTo(
+          meLayerRef.current,
+          { opacity: 0, x: 40, scale: 0.98 },
+          { opacity: 1, x: 0, scale: 1, duration: 1.1, ease: "expo.out" },
+          "-=0.9"
+        )
+        // 3. Navigation header
+        .fromTo(
+          navRef.current,
+          { y: -20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.7"
+        )
+        // 4. Eyebrow
+        .fromTo(
+          eyebrowRef.current,
+          { x: -30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6 },
+          "-=0.5"
+        )
+        // 5. Headline
+        .fromTo(
+          headlineRef.current,
+          { x: -40, opacity: 0, filter: "blur(8px)" },
+          { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "power4.out" },
+          "-=0.45"
+        )
+        // 6. Contact strip
+        .fromTo(
+          contactRef.current,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6 },
+          "-=0.4"
+        )
+        // 7. Bio quote
+        .fromTo(
+          quoteRef.current,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65 },
+          "-=0.35"
+        )
+        // 8. Corner details
+        .fromTo(
+          [scrollRef.current, rightTagRef.current, locationRef.current],
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
+          "-=0.3"
+        );
+
+      // Continuous pulse on scroll indicator
+      if (scrollLineRef.current) {
+        gsap.to(scrollLineRef.current, {
+          scaleY: 0.45,
+          opacity: 0.35,
+          transformOrigin: "top",
+          duration: 1.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+
+      // Interactive 2.5D Multi-layer mouse parallax (desktop only)
+      if (window.innerWidth >= 1024) {
+        const bgXTo = gsap.quickTo(bgLayerRef.current, "x", { duration: 1.0, ease: "power2.out" });
+        const bgYTo = gsap.quickTo(bgLayerRef.current, "y", { duration: 1.0, ease: "power2.out" });
+
+        const meXTo = gsap.quickTo(meLayerRef.current, "x", { duration: 0.7, ease: "power2.out" });
+        const meYTo = gsap.quickTo(meLayerRef.current, "y", { duration: 0.7, ease: "power2.out" });
+
+        const handleMouseMove = (e: MouseEvent) => {
+          const { clientX, clientY } = e;
+          const xNorm = clientX / window.innerWidth - 0.5;
+          const yNorm = clientY / window.innerHeight - 0.5;
+
+          // Background moves slower, foreground portrait moves faster
+          bgXTo(xNorm * 10);
+          bgYTo(yNorm * 8);
+
+          meXTo(xNorm * 22);
+          meYTo(yNorm * 16);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+      }
+    },
+    { scope: containerRef }
+  );
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen flex flex-col overflow-hidden"
-      style={{ background: "#3d8bff", fontFamily: "'Syne', sans-serif" }}
+      id="hero-section"
+      className="relative w-full min-h-screen lg:h-screen flex flex-col justify-between overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none"
+      style={{
+        fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+      }}
     >
-      {/* Font import */}
+      {/* ── Google Fonts injection & Custom Typography ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&display=swap');
-        .mono { font-family: 'Space Mono', monospace; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap');
+
+        .ink-headline {
+          font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+          font-weight: 900;
+          color: #171614;
+          letter-spacing: -0.04em;
+          line-height: 0.88;
+        }
+
+        .motion-ink-blur {
+          position: relative;
+          display: inline-block;
+          text-shadow: 
+            3px 0 6px rgba(23, 22, 20, 0.45),
+            12px 0 16px rgba(23, 22, 20, 0.30),
+            26px 0 28px rgba(23, 22, 20, 0.18),
+            50px 0 45px rgba(23, 22, 20, 0.10);
+        }
+
+        .paper-grain {
+          background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+          background-size: 4px 4px;
+        }
       `}</style>
 
-      {/* Decorative blobs */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none select-none" aria-hidden>
-        <ellipse cx="120" cy="80"  rx="22" ry="14" fill="#1a3a8f" fillOpacity="0.18" className="hero-blob" />
-        <ellipse cx="340" cy="55"  rx="12" ry="8"  fill="#1a3a8f" fillOpacity="0.18" className="hero-blob" />
-        <ellipse cx="60"  cy="260" rx="18" ry="11" fill="#1a3a8f" fillOpacity="0.14" className="hero-blob" />
-        <ellipse cx="500" cy="200" rx="10" ry="7"  fill="#1a3a8f" fillOpacity="0.18" className="hero-blob" />
-        <ellipse cx="700" cy="90"  rx="20" ry="13" fill="#1a3a8f" fillOpacity="0.16" className="hero-blob" />
-        <ellipse cx="760" cy="350" rx="15" ry="9"  fill="#1a3a8f" fillOpacity="0.18" className="hero-blob" />
-        <ellipse cx="900" cy="140" rx="11" ry="7"  fill="#1a3a8f" fillOpacity="0.18" className="hero-blob" />
-        {/* Diagonal stripe */}
-        <rect x="55%" y="0" width="90" height="120%" fill="#1a3aff" fillOpacity="0.09" transform="rotate(-8,700,200)" />
-      </svg>
-
-      {/* Vertical meta text */}
-      <div
-        className="mono absolute left-3 top-1/2 text-white/30 text-[10px] pointer-events-none select-none z-10"
-        style={{ writingMode: "vertical-rl", transform: "translateY(-50%) rotate(180deg)" }}
-      >
-        Naren Roy — Portfolio 2025
-      </div>
-
-      {/* ── MAIN CONTENT ─────────────────────────────────────────────────────
-           pt-28 = 112px clears the floating navbar (navbar height ~60px + 16px top offset + gap)
-      ─────────────────────────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex-1 flex flex-col md:flex-row items-center gap-6 px-12 md:px-20 pt-28 pb-6">
-
-        {/* Left: text */}
-        <div className="flex-1 flex flex-col justify-center">
-
-          {/* Badge */}
-          <div
-            ref={badgeRef}
-            className="mono inline-flex self-start items-center gap-2 px-3 py-1 rounded-full border border-white/30 bg-white/15 backdrop-blur-sm text-white text-[11px] tracking-widest uppercase mb-5"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            Open to Work
-          </div>
-
-          {/* Headline — clamped so it NEVER overflows or wraps per-letter */}
-          <h1
-            ref={headlineRef}
-            className="font-extrabold text-white leading-[1.08] tracking-tight"
-            style={{
-              fontFamily: "'Syne', sans-serif",
-              fontSize: "clamp(2.6rem, 5.5vw, 5.8rem)",
-            }}
-          >
-            The art<br />of coding.
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            ref={subRef}
-            className="mono mt-5 text-white/75 leading-relaxed"
-            style={{ fontSize: "clamp(0.72rem, 1vw, 0.92rem)", maxWidth: "340px" }}
-          >
-            Front End Developer — I build motion‑driven,{" "}
-            pixel-perfect digital experiences{" "}
-            <span className="text-white font-bold">from Siliguri.</span>
-          </p>
-
-          {/* CTA buttons */}
-          <div ref={ctaRef} className="mt-7 flex flex-wrap gap-3">
-            <a
-              href="#projects"
-              className="group flex items-center gap-2 px-6 py-2.5 bg-white text-[#3d8bff] rounded-full font-bold text-sm hover:bg-yellow-300 hover:text-black transition-all duration-300"
-            >
-              See Projects
-              <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
-            <a
-              href="#contact"
-              className="flex items-center gap-2 px-6 py-2.5 border-2 border-white/40 text-white rounded-full font-bold text-sm hover:border-white hover:bg-white/10 transition-all duration-300"
-            >
-              Let's Talk
-            </a>
-          </div>
+      {/* ── Copy Notification Toast ── */}
+      {copiedText && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-[#1c1b18] text-[#E6E2D7] text-xs font-semibold shadow-2xl border border-white/10 animate-fade-in">
+          <Check className="w-3.5 h-3.5 text-[#f5be0b]" />
+          <span>{copiedText} copied to clipboard!</span>
         </div>
+      )}
 
-        {/* Right: illustration */}
+      {/* ── MULTI-LAYER ARTWORK (bg.png & me.png) ── */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+        {/* Layer 1: Background Yellow Energy / Art blast */}
         <div
-          ref={illustrationRef}
-          className="w-full md:w-[46%] lg:w-[42%] flex-shrink-0 flex items-end justify-center"
-          style={{ maxHeight: "460px" }}
+          ref={bgLayerRef}
+          className="absolute inset-0 w-full h-full will-change-transform"
         >
-          <HeroIllustration />
+          <Image
+            src="/bg.png"
+            alt="Art blast background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-contain object-right lg:object-center select-none"
+          />
+        </div>
+
+        {/* Layer 2: Cutout Portrait Layer */}
+        <div
+          ref={meLayerRef}
+          className="absolute inset-0 w-full h-full will-change-transform z-10"
+        >
+          <Image
+            src="/me.png"
+            alt="Naren Roy Portrait"
+            fill
+            priority
+            sizes="100vw"
+            className="object-contain object-right lg:object-center select-none"
+          />
+        </div>
+
+        {/* Paper texture grain overlay */}
+        <div className="absolute inset-0 w-full h-full paper-grain opacity-25 mix-blend-multiply pointer-events-none z-20" />
+      </div>
+
+      {/* ── TOP NAVIGATION ── */}
+      <header
+        ref={navRef}
+        className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pt-6 sm:pt-8 flex items-center justify-between"
+      >
+        {/* Brand / Name */}
+        <a
+          href="#home"
+          className="group flex items-center gap-2.5 text-[#1b1a17] hover:opacity-80 transition-opacity cursor-pointer"
+          aria-label="Naren Roy — Return to top"
+        >
+          <span className="text-xs sm:text-sm font-black tracking-[0.22em] uppercase">
+            NAREN ROY
+          </span>
+          <span className="inline-block w-8 sm:w-10 h-[1.5px] bg-[#1b1a17]/70 group-hover:w-14 transition-all duration-300" />
+        </a>
+
+        {/* Nav Links */}
+        <nav aria-label="Hero navigation" className="flex items-center gap-5 sm:gap-8 md:gap-11">
+          {[
+            { label: "about", href: "#about" },
+            { label: "projects", href: "#projects" },
+            { label: "skills", href: "#skills" },
+            { label: "contact", href: "#contact" },
+          ].map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              className="text-xs sm:text-[13px] font-medium tracking-wide text-[#2e2c26] hover:text-black transition-colors relative py-1 group"
+            >
+              {label}
+              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black group-hover:w-full transition-all duration-200" />
+            </a>
+          ))}
+        </nav>
+      </header>
+
+      {/* ── MAIN CONTENT (LEFT COLUMN) ── */}
+      <div className="relative z-30 w-full flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 py-8 md:py-6">
+        <div className="w-full max-w-xl lg:max-w-2xl flex flex-col">
+          {/* Eyebrow */}
+          <div ref={eyebrowRef} className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-5">
+            <span className="w-8 sm:w-11 h-[1.5px] bg-[#1c1b18]/70" />
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#47443c]">
+              FULL STACK SOFTWARE DEVELOPER
+            </span>
+          </div>
+
+          {/* Main Display Headline (Live Typography matching reference) */}
+          <div ref={headlineRef} className="mb-4 sm:mb-6 select-text">
+            <h1 className="ink-headline text-[3.6rem] sm:text-[5rem] md:text-[6.2rem] lg:text-[7.2rem] tracking-tight">
+              <span className="motion-ink-blur block">Naren</span>
+              <span className="motion-ink-blur block">Roy</span>
+            </h1>
+          </div>
+
+          {/* Contact Bar */}
+          <div
+            ref={contactRef}
+            className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-5 sm:mb-7"
+          >
+            {/* Phone */}
+            <a
+              href="tel:+917864066694"
+              onClick={(e) => {
+                if (window.innerWidth >= 1024) {
+                  e.preventDefault();
+                  handleCopy("+91 7864066694", "Phone number");
+                }
+              }}
+              className="flex items-center gap-1.5 hover:text-amber-800 transition-colors group cursor-pointer"
+              title="Call / Copy +91 7864066694"
+            >
+              <Phone className="w-3.5 h-3.5 opacity-80 group-hover:scale-110 transition-transform" />
+              <span>+91 7864066694</span>
+            </a>
+
+            <span className="text-[#1c1b18]/30 select-none">——</span>
+
+            {/* Email */}
+            <a
+              href="mailto:narensarkar607@gmail.com"
+              onClick={(e) => {
+                if (window.innerWidth >= 1024 && e.shiftKey) {
+                  e.preventDefault();
+                  handleCopy("narensarkar607@gmail.com", "Email address");
+                }
+              }}
+              className="flex items-center gap-1.5 hover:text-amber-800 transition-colors group cursor-pointer"
+              title="Email narensarkar607@gmail.com (Shift+click to copy)"
+            >
+              <Mail className="w-3.5 h-3.5 opacity-80 group-hover:scale-110 transition-transform" />
+              <span>narensarkar607@gmail.com</span>
+            </a>
+
+            <span className="text-[#1c1b18]/30 select-none">——</span>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-2">
+              <a
+                href="https://www.linkedin.com/in/narensarkar607"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1 rounded hover:bg-black/5 hover:text-[#0a66c2] transition-colors"
+                aria-label="Naren Roy LinkedIn profile"
+                title="LinkedIn Profile"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://github.com/narensarkar607"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1 rounded hover:bg-black/5 hover:text-black transition-colors"
+                aria-label="Naren Roy GitHub profile"
+                title="GitHub Profile"
+              >
+                <Github className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Bio Quote Block */}
+          <div
+            ref={quoteRef}
+            className="flex items-stretch gap-3 sm:gap-3.5 max-w-sm sm:max-w-md lg:max-w-lg select-text"
+          >
+            {/* Yellow Accent Bar */}
+            <div className="w-[3px] rounded-full bg-[#f3b413] shrink-0" />
+            <p className="text-[12px] sm:text-[13px] md:text-sm leading-relaxed text-[#35332c] font-normal">
+              I build interactive web and mobile experiences
+              <br className="hidden sm:inline" /> with a focus on modern frontend, GSAP animations,
+              <br className="hidden sm:inline" /> WebGL and immersive digital experiences.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* ── Bottom skill strip ── */}
-      <div
-        ref={stripRef}
-        className="relative z-10 w-full border-t border-white/20 grid"
-        style={{ gridTemplateColumns: `repeat(${SKILLS.length}, 1fr)` }}
-      >
-        {SKILLS.map((s, i) => (
+      {/* ── FOOTER / FOLD ACCENTS ── */}
+      <div className="relative z-30 w-full px-6 sm:px-10 md:px-14 lg:px-16 pb-6 sm:pb-8 flex items-end justify-between">
+        {/* Bottom Left: Scroll To Explore */}
+        <a
+          ref={scrollRef}
+          href="#about"
+          className="group flex flex-col items-start gap-1 cursor-pointer"
+          aria-label="Scroll down to explore about section"
+        >
           <div
-            key={i}
-            className="skill-item px-4 py-3 border-r border-white/20 last:border-r-0 hover:bg-white/10 transition-colors duration-200 cursor-default"
-          >
-            <span className="mono text-white/40 text-[10px] block mb-0.5">{s.num}</span>
-            <span className="text-white text-xs font-bold leading-tight block">{s.label}</span>
+            ref={scrollLineRef}
+            className="w-[1.5px] h-6 bg-[#1c1b18]/70 group-hover:bg-[#f3b413] group-hover:h-8 transition-all duration-300 origin-top"
+          />
+          <div className="text-[9px] sm:text-[10px] font-bold tracking-[0.22em] uppercase text-[#47443c] group-hover:text-black transition-colors leading-tight">
+            SCROLL
+            <br />
+            TO EXPLORE
           </div>
-        ))}
+        </a>
+
+        {/* Bottom Right: Siliguri, India */}
+        <div
+          ref={locationRef}
+          className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#1c1b18] md:text-[#f8f5ee]"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#f5be0b] shadow-[0_0_8px_#f5be0b] shrink-0" />
+          <span>SILIGURI, INDIA</span>
+          <span className="w-7 sm:w-10 h-[1.5px] bg-current opacity-60 shrink-0" />
+        </div>
+      </div>
+
+      {/* ── DESKTOP RIGHT-EDGE ACCENT (CODE ANIMATE CREATE) ── */}
+      <div
+        ref={rightTagRef}
+        className="hidden lg:flex absolute right-14 xl:right-16 top-48 flex-col items-start gap-1 text-[11px] font-bold tracking-[0.22em] uppercase text-[#2c2a24] select-none z-30 pointer-events-none"
+      >
+        <span>CODE</span>
+        <span>ANIMATE</span>
+        <span>CREATE</span>
+        <span className="w-6 h-[1.5px] bg-[#1c1b18]/60 mt-1" />
       </div>
     </section>
   );
