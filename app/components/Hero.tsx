@@ -128,6 +128,23 @@ export default function Hero() {
           background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
           background-size: 4px 4px;
         }
+
+        /* Desktop & Landscape layout: 2-column side-by-side with interactive WebGL */
+        @media (min-width: 1024px) and (orientation: landscape) {
+          .hero-main-content {
+            flex-direction: row !important;
+          }
+          .hero-left-col {
+            width: 48% !important;
+            max-width: none !important;
+          }
+          .hero-portrait-art {
+            display: none !important;
+          }
+          .hero-desktop-art {
+            display: flex !important;
+          }
+        }
       `}</style>
 
       {/* ── Copy Notification Toast ── */}
@@ -178,13 +195,13 @@ export default function Hero() {
         </nav>
       </header>
 
-      {/* ── MAIN CONTENT: RESPONSIVE TWO-COLUMN (Tablet/Desktop) & STACK (Mobile) ── */}
-      <div className="relative z-30 w-full flex-1 flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-10 lg:px-16 py-3 md:py-4 gap-4 md:gap-6 lg:gap-8 my-auto">
+      {/* ── MAIN CONTENT: RESPONSIVE TWO-COLUMN (Landscape/Desktop) & STACK (Mobile/Tablet Portrait) ── */}
+      <div className="hero-main-content relative z-30 w-full flex-1 flex flex-col lg:landscape:flex-row items-center justify-between px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 lg:py-4 gap-4 sm:gap-6 md:gap-8 lg:gap-8 my-auto">
         
-        {/* ── LEFT COLUMN: TYPOGRAPHY, BIO & CONTACT DETAILS ── */}
-        <div className="w-full md:w-[48%] lg:w-[45%] flex flex-col justify-center shrink-0">
+        {/* ── LEFT / TOP COLUMN: TYPOGRAPHY, BIO & CONTACT DETAILS ── */}
+        <div className="hero-left-col w-full max-w-xl md:max-w-2xl lg:max-w-none lg:landscape:w-[48%] xl:landscape:w-[45%] flex flex-col justify-center shrink-0">
           {/* Eyebrow */}
-          <div ref={eyebrowRef} className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2.5">
+          <div ref={eyebrowRef} className="hero-eyebrow flex items-center gap-2 sm:gap-3 mb-2 sm:mb-2.5 md:mb-3">
             <span className="w-6 sm:w-10 h-[1.5px] bg-[#1c1b18]/70" />
             <span className="text-[9px] sm:text-[10px] md:text-xs font-bold tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#47443c]">
               FULL STACK SOFTWARE DEVELOPER
@@ -192,22 +209,22 @@ export default function Hero() {
           </div>
 
           {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
-          <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-4">
+          <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-5">
             <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
 
             <div className="relative inline-block select-none">
               <img
                 src="/naren-roy-title.png"
                 alt="Naren Roy"
-                className="w-[210px] xs:w-[250px] sm:w-[320px] md:w-[360px] lg:w-[450px] xl:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
+                className="w-[210px] xs:w-[250px] sm:w-[320px] md:w-[440px] lg:w-[460px] xl:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
               />
             </div>
           </div>
 
-          {/* ── MOBILE-ONLY ARTWORK SHOWCASE (Hidden on Tablet & Desktop) ── */}
+          {/* ── MOBILE & TABLET-PORTRAIT ARTWORK SHOWCASE (Hidden on Desktop & Tablet Landscape) ── */}
           <div
             ref={mobileArtRef}
-            className="md:hidden relative w-full max-w-[290px] sm:max-w-[340px] aspect-[4/3] mx-auto my-2.5 overflow-hidden rounded-xl"
+            className="hero-portrait-art lg:landscape:hidden relative w-full max-w-[290px] sm:max-w-[360px] md:max-w-[540px] aspect-[4/3] md:aspect-[16/11] mx-auto my-3 sm:my-4 md:my-6 overflow-hidden rounded-xl"
           >
             <div className="absolute inset-0 w-full h-full">
               <Image
@@ -215,7 +232,7 @@ export default function Hero() {
                 alt="Yellow energy art"
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain object-center select-none"
               />
             </div>
@@ -225,7 +242,7 @@ export default function Hero() {
                 alt="Naren Roy Portrait"
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain object-center select-none"
               />
             </div>
@@ -234,7 +251,7 @@ export default function Hero() {
           {/* Contact Bar */}
           <div
             ref={contactRef}
-            className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 sm:gap-3 text-[11px] sm:text-xs text-[#2b2923] font-medium mb-3 sm:mb-4 md:mb-5"
+            className="hero-contact flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 text-[11px] sm:text-xs md:text-[13px] text-[#2b2923] font-medium mb-3 sm:mb-4 md:mb-6"
           >
             {/* Phone */}
             <a
@@ -300,11 +317,11 @@ export default function Hero() {
           {/* Bio Quote Block */}
           <div
             ref={quoteRef}
-            className="flex items-stretch gap-2.5 sm:gap-3 max-w-sm sm:max-w-md lg:max-w-lg select-text"
+            className="hero-quote flex items-stretch gap-2.5 sm:gap-3 max-w-sm sm:max-w-md md:max-w-xl select-text"
           >
             {/* Yellow Accent Bar */}
             <div className="w-[3px] rounded-full bg-[#f3b413] shrink-0" />
-            <p className="text-[11px] sm:text-xs md:text-sm leading-relaxed text-[#35332c] font-normal">
+            <p className="text-[11px] sm:text-xs md:text-sm lg:text-[14px] leading-relaxed text-[#35332c] font-normal">
               I build interactive web and mobile experiences
               <br className="hidden sm:inline" /> with a focus on modern frontend, GSAP animations,
               <br className="hidden sm:inline" /> WebGL and immersive digital experiences.
@@ -312,40 +329,13 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN: TABLET & DESKTOP ARTWORK SHOWCASE (md:flex) ── */}
-        <div className="hidden md:flex flex-1 items-center justify-center md:justify-end h-[360px] md:h-[440px] lg:h-[500px] xl:h-[560px] relative w-full overflow-hidden">
+        {/* ── RIGHT COLUMN: TABLET LANDSCAPE & DESKTOP ARTWORK SHOWCASE ── */}
+        <div className="hero-desktop-art hidden flex-1 items-center justify-center lg:justify-end h-[420px] lg:h-[520px] xl:h-[600px] relative w-full overflow-hidden">
           
-          {/* Tablet Static Artwork (768px - 1023px): Perfectly contained, Zero WebGL overhead, Zero overlap */}
-          <div
-            ref={tabletArtRef}
-            className="md:block lg:hidden relative w-full h-full"
-          >
-            <div className="absolute inset-0 w-full h-full">
-              <Image
-                src="/bg.png"
-                alt="Yellow energy art"
-                fill
-                priority
-                sizes="(max-width: 1024px) 50vw, 40vw"
-                className="object-contain object-right select-none"
-              />
-            </div>
-            <div className="absolute inset-0 w-full h-full">
-              <Image
-                src="/me.png"
-                alt="Naren Roy Portrait"
-                fill
-                priority
-                sizes="(max-width: 1024px) 50vw, 40vw"
-                className="object-contain object-right select-none"
-              />
-            </div>
-          </div>
-
-          {/* Desktop Interactive WebGL Water Ripple & Pixel Shader Canvas (>= 1024px) */}
+          {/* Desktop Interactive WebGL Water Ripple & Pixel Shader Canvas */}
           <div
             ref={desktopArtRef}
-            className="hidden lg:block relative w-full h-full pointer-events-auto"
+            className="relative w-full h-full pointer-events-auto"
           >
             <PixelShaderCanvas
               bgSrc="/bg.png"
