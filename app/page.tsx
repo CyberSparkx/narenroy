@@ -29,8 +29,8 @@ export default function Home() {
         <Contact />
       </div>
 
-      <footer className="w-full py-6 text-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-zinc-800">
-        <p>© {new Date().getFullYear()} Naren Roy. All rights reserved.</p>
+      <footer className="w-full py-8 text-center text-xs font-mono tracking-widest uppercase text-[#736d60] bg-[#E6E2D7] border-t border-[#1c1b18]/15">
+        <p>© {new Date().getFullYear()} Naren Roy · Crafted with precision & motion.</p>
       </footer>
     </main>
   );

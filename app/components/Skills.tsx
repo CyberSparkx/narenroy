@@ -1,55 +1,81 @@
 "use client";
 
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import {
+  Code2,
+  Sparkles,
+  Server,
+  Database,
+  Wrench,
+  Cloud,
+  CheckCircle2,
+} from "lucide-react";
 import { portfolioData } from "../data/portfolio";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const CATEGORIES = [
   {
     key: "languages",
-    label: "Languages",
+    label: "Core Languages",
     num: "01",
-    accent: "#3d8bff",
-    icon: "{ }",
+    subtext: "Foundational syntaxes for performance, algorithms, and type-safe systems.",
+    icon: Code2,
+    customSkills: ["JavaScript (ES6+)", "TypeScript", "Python", "C", "HTML5", "CSS3 / Sass"],
   },
   {
     key: "frontend",
-    label: "Frontend",
+    label: "Frontend & Motion",
     num: "02",
-    accent: "#f472b6",
-    icon: "◈",
+    subtext: "Kinetic UI, WebGL shaders, component architectures & reactive applications.",
+    icon: Sparkles,
+    customSkills: [
+      "React.js",
+      "Next.js 15",
+      "React Native",
+      "GSAP Core & ScrollTrigger",
+      "Three.js & GLSL Shaders",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Lenis Smooth Scroll",
+    ],
   },
   {
     key: "backend",
-    label: "Backend",
+    label: "Backend & Systems",
     num: "03",
-    accent: "#34d399",
-    icon: "⬡",
+    subtext: "Distributed APIs, microservices, websockets & real-time communication engines.",
+    icon: Server,
+    customSkills: ["Node.js", "Express.js", "RESTful APIs", "WebSockets", "Socket.IO", "JWT & OAuth"],
   },
   {
     key: "databases",
-    label: "Databases",
+    label: "Databases & Storage",
     num: "04",
-    accent: "#fbbf24",
-    icon: "⊞",
+    subtext: "Document models, relational schemas, caching, and persistence workflows.",
+    icon: Database,
+    customSkills: ["MongoDB", "Mongoose ORM", "MySQL", "Firebase", "Database Schema Design"],
   },
   {
     key: "tools",
-    label: "Tools",
+    label: "Workflow & Engineering",
     num: "05",
-    accent: "#fb923c",
-    icon: "⚙",
+    subtext: "Containerization, versioning, debugging, API testing & interface prototyping.",
+    icon: Wrench,
+    customSkills: ["Git & GitHub", "Docker", "Postman", "MongoDB Compass", "Figma", "VS Code"],
   },
   {
     key: "cloudDevOps",
-    label: "Cloud / DevOps",
+    label: "Cloud & Deployment",
     num: "06",
-    accent: "#22d3ee",
-    icon: "⬢",
+    subtext: "Continuous delivery pipelines, edge hosting, cloud servers & production monitoring.",
+    icon: Cloud,
+    customSkills: ["Vercel", "Netlify", "Railway", "CI/CD Pipelines", "Edge Functions"],
   },
 ] as const;
 
@@ -57,198 +83,230 @@ type SkillKey = typeof CATEGORIES[number]["key"];
 
 export default function Skills() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
 
-  useGSAP(() => {
-    // Section label + heading
-    gsap.from(".sk-label", {
-      scrollTrigger: { trigger: containerRef.current, start: "top 78%" },
-      y: 20, opacity: 0, duration: 0.5, ease: "power3.out",
-    });
-    gsap.from(".sk-heading", {
-      scrollTrigger: { trigger: containerRef.current, start: "top 75%" },
-      y: 50, opacity: 0, duration: 0.8, ease: "power3.out",
-    });
+  useGSAP(
+    () => {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) return;
 
-    // Cards stagger
-    gsap.from(".sk-card", {
-      scrollTrigger: {
-        trigger: ".sk-grid",
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
-      y: 50, opacity: 0, duration: 0.65,
-      stagger: 0.1, ease: "power3.out",
-    });
-  }, { scope: containerRef });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+        defaults: { ease: "power3.out" },
+      });
+
+      // 1. Line expansion
+      tl.fromTo(
+        ".sk-rule",
+        { scaleX: 0, transformOrigin: "left" },
+        { scaleX: 1, duration: 0.8, ease: "power2.inOut" }
+      )
+        // 2. Section tag
+        .fromTo(
+          ".sk-tag",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5 },
+          "-=0.5"
+        )
+        // 3. Headline & paragraph
+        .fromTo(
+          headlineRef.current,
+          { y: 35, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          "-=0.3"
+        )
+        .fromTo(
+          ".sk-desc",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6 },
+          "-=0.4"
+        )
+        // 4. Cards stagger
+        .fromTo(
+          ".sk-card",
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, stagger: 0.08, ease: "power2.out" },
+          "-=0.3"
+        )
+        // 5. Bottom ledger ribbon
+        .fromTo(
+          ".sk-footer-rule",
+          { scaleX: 0, transformOrigin: "left" },
+          { scaleX: 1, duration: 0.8, ease: "power2.inOut" },
+          "-=0.2"
+        )
+        .fromTo(
+          ".sk-footer-content",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5 },
+          "-=0.4"
+        );
+    },
+    { scope: containerRef }
+  );
+
+  const totalSkillsCount = CATEGORIES.reduce((acc, cat) => acc + cat.customSkills.length, 0);
 
   return (
     <section
       ref={containerRef}
       id="skills"
-      className="relative w-full overflow-hidden py-24 md:py-32"
-      style={{ background: "#0a0a0f", fontFamily: "'Syne', sans-serif" }}
+      className="relative w-full overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none pt-16 pb-24 sm:pt-24 sm:pb-32 md:pt-32 md:pb-40"
+      style={{
+        fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+      }}
     >
+      {/* ── Custom Styling & Grain ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .mono { font-family: 'Space Mono', monospace; }
-        .sk-card { transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease; }
-        .sk-card:hover { transform: translateY(-4px); }
-        .sk-pill { transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap');
+
+        .skills-paper-grain {
+          background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+          background-size: 4px 4px;
+        }
+
+        .gold-ink-highlight {
+          position: relative;
+          display: inline-block;
+          color: #1c1b18;
+        }
+
+        .gold-ink-highlight::before {
+          content: "";
+          position: absolute;
+          left: -4px;
+          right: -4px;
+          bottom: 4px;
+          height: 32%;
+          background: rgba(245, 190, 11, 0.45);
+          transform: rotate(-1.2deg);
+          z-index: -1;
+          border-radius: 2px;
+          pointer-events: none;
+        }
       `}</style>
 
-      {/* Grid background */}
+      {/* ── Texture Overlay ── */}
+      <div className="absolute inset-0 w-full h-full skills-paper-grain opacity-25 mix-blend-multiply pointer-events-none z-10" />
+
+      {/* ── Atmospheric Ambient Golden Glow (Painterly Depth) ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute top-1/3 left-10 w-[550px] h-[550px] opacity-15 pointer-events-none -ml-36 z-0"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(61,139,255,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(61,139,255,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
+          background: "radial-gradient(circle, #f5be0b 0%, rgba(245,190,11,0.05) 60%, transparent 75%)",
+          filter: "blur(70px)",
+        }}
+      />
+      <div
+        className="absolute bottom-1/4 right-0 w-[450px] h-[450px] opacity-15 pointer-events-none -mr-32 z-0"
+        style={{
+          background: "radial-gradient(circle, #f5be0b 0%, rgba(245,190,11,0.05) 60%, transparent 75%)",
+          filter: "blur(60px)",
         }}
       />
 
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(61,139,255,0.06) 0%, transparent 70%)" }}
-      />
+      <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
+        
+        {/* ── SECTION HEADER & EYEBROW ── */}
+        <div className="flex flex-col gap-3 mb-12 sm:mb-16 md:mb-20">
+          <div className="sk-tag flex items-center gap-3">
+            <span className="sk-rule w-8 sm:w-12 h-[1.5px] bg-[#1c1b18]/70" />
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#47443c]">
+              02 // WHAT I USE — TECHNICAL ARSENAL
+            </span>
+          </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <h2
+              ref={headlineRef}
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#1c1b18] leading-[1.12] max-w-3xl"
+            >
+              Tools of precision, motion &{" "}
+              <span className="gold-ink-highlight">architecture.</span>
+            </h2>
 
-        {/* Section label */}
-        <div className="sk-label mono flex items-center gap-3 mb-8">
-          <span className="w-8 h-px" style={{ background: "#3d8bff" }} />
-          <span className="text-xs tracking-[0.3em] uppercase" style={{ color: "#3d8bff" }}>What I Use</span>
+            <p className="sk-desc text-sm sm:text-[15px] text-[#47443c] max-w-md leading-relaxed font-normal">
+              A curated inventory of programming languages, kinetic frameworks, graphics engines, and production infrastructure I deploy to engineer responsive, high-performance software.
+            </p>
+          </div>
         </div>
 
-        {/* Heading */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16">
-          <h2
-            className="sk-heading font-extrabold text-white leading-[1.05] tracking-tight"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)" }}
-          >
-            Technical<br />
-            <span style={{ color: "#3d8bff" }}>Arsenal.</span>
-          </h2>
-          <p
-            className="mono text-white/30 max-w-xs leading-relaxed"
-            style={{ fontSize: "0.78rem" }}
-          >
-            Tools & technologies I use to build fast, animated, production-ready products.
-          </p>
-        </div>
-
-        {/* Cards grid */}
-        <div className="sk-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {CATEGORIES.map(({ key, label, num, accent, icon }) => {
-            const skills = (portfolioData.skills as Record<SkillKey, string[]>)[key] ?? [];
-
+        {/* ── WORKSHOP CARDS GRID (ARCHITECTURAL LEDGER) ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-16 sm:mb-20">
+          {CATEGORIES.map(({ key, label, num, subtext, icon: Icon, customSkills }) => {
             return (
               <div
                 key={key}
-                className="sk-card relative rounded-2xl p-6 flex flex-col gap-5"
-                style={{
-                  background: "rgba(255,255,255,0.025)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = `${accent}40`;
-                  (e.currentTarget as HTMLElement).style.background = `rgba(255,255,255,0.04)`;
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.025)";
-                }}
+                className="sk-card group relative rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 bg-[#FAF8F3] border border-[#1c1b18]/10 hover:border-[#f5be0b]/80 hover:shadow-[0_12px_32px_rgba(28,27,24,0.06)] hover:-translate-y-1"
               >
-                {/* Card header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex flex-col gap-1.5">
-                    {/* Number */}
-                    <span
-                      className="mono text-[10px] tracking-widest"
-                      style={{ color: "rgba(255,255,255,0.2)" }}
-                    >
-                      {num}
+                <div>
+                  {/* Card Header: Number & Architectural Icon */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-xs font-bold tracking-widest text-[#8a8475] uppercase">
+                      {num} //
                     </span>
-                    {/* Label */}
-                    <h3
-                      className="font-bold text-white text-lg leading-none"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      {label}
-                    </h3>
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#E6E2D7] text-[#1c1b18] group-hover:bg-[#f5be0b] group-hover:text-black transition-colors duration-200">
+                      <Icon className="w-4 h-4" />
+                    </div>
                   </div>
 
-                  {/* Icon badge */}
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
-                    style={{
-                      background: `${accent}15`,
-                      border: `1px solid ${accent}30`,
-                      color: accent,
-                      fontFamily: "monospace",
-                    }}
-                  >
-                    {icon}
+                  {/* Category Title */}
+                  <h3 className="text-lg sm:text-xl font-black text-[#1c1b18] tracking-tight mb-2">
+                    {label}
+                  </h3>
+
+                  {/* Category Subtext */}
+                  <p className="text-xs text-[#5c574c] leading-relaxed mb-5 font-normal">
+                    {subtext}
+                  </p>
+
+                  {/* Hairline Divider */}
+                  <div className="w-full h-px bg-[#1c1b18]/8 mb-5" />
+
+                  {/* Skill Pills */}
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {customSkills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide bg-[#EAE6DC] text-[#2c2923] border border-[#1c1b18]/8 group-hover:border-[#1c1b18]/15 hover:!bg-[#f5be0b]/20 hover:!text-[#1c1b18] hover:!border-[#f5be0b]/60 transition-all cursor-default select-text"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Divider */}
-                <div style={{ height: "1px", background: "rgba(255,255,255,0.05)" }} />
-
-                {/* Skill pills */}
-                <div className="flex flex-wrap gap-2">
-                  {skills.map(skill => (
-                    <span
-                      key={skill}
-                      className="sk-pill mono text-[11px] tracking-wide px-2.5 py-1 rounded-lg cursor-default"
-                      style={{
-                        color: "rgba(255,255,255,0.45)",
-                        background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(255,255,255,0.07)",
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLElement).style.color = "white";
-                        (e.currentTarget as HTMLElement).style.background = `${accent}18`;
-                        (e.currentTarget as HTMLElement).style.borderColor = `${accent}50`;
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)";
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-                      }}
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                {/* Card Ledger Stamp */}
+                <div className="mt-6 pt-3.5 border-t border-[#1c1b18]/6 flex items-center justify-between text-[10px] font-mono tracking-widest uppercase text-[#8a8475]">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3 h-3 text-[#1c1b18]/40 group-hover:text-[#f5be0b] transition-colors" />
+                    <span>PRODUCTION VERIFIED</span>
+                  </span>
+                  <span>{customSkills.length} SKILLS</span>
                 </div>
-
-                {/* Corner accent */}
-                <div
-                  className="absolute bottom-0 right-0 w-20 h-20 rounded-2xl pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at bottom right, ${accent}10 0%, transparent 70%)`,
-                  }}
-                />
               </div>
             );
           })}
         </div>
 
-        {/* Bottom rule with skill count */}
-        <div
-          className="mt-14 pt-6 flex items-center justify-between"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <span className="mono text-white/20 text-[11px] tracking-widest uppercase">
-            {CATEGORIES.length} Categories
-          </span>
-          <span className="mono text-white/20 text-[11px] tracking-widest uppercase">
-            {CATEGORIES.reduce((acc, { key }) =>
-              acc + ((portfolioData.skills as Record<SkillKey, string[]>)[key]?.length ?? 0), 0
-            )}+ Skills
-          </span>
+        {/* ── BOTTOM LEDGER FOOTER RIBBON ── */}
+        <div className="w-full">
+          <div className="sk-footer-rule w-full h-px bg-[#1c1b18]/15 mb-6" />
+          <div className="sk-footer-content flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono tracking-wider text-[#6b6557]">
+            <div className="flex items-center gap-4">
+              <span>TOTAL DISCIPLINES: {CATEGORIES.length}</span>
+              <span className="text-[#1c1b18]/25">•</span>
+              <span>VERIFIED CAPABILITIES: {totalSkillsCount}+</span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] text-[#7a7364]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#f5be0b]" />
+              <span>STACK OPTIMIZED FOR 60FPS EXPERIENCES</span>
+            </div>
+          </div>
         </div>
 
       </div>

@@ -40,52 +40,58 @@ export const portfolioData = {
   },
   experience: [
     {
+      role: "Freelance Creative Developer & Full Stack Engineer",
+      company: "Independent / Creative Studios & Startups",
+      duration: "Present",
+      description: [
+        "Engineering bespoke high-performance websites, 60fps kinetic animations with GSAP, interactive WebGL shaders, and full-stack React / Next.js / React Native architectures.",
+        "Delivering type-safe, accessible applications and end-to-end creative digital experiences for global clients.",
+      ],
+    },
+    {
+      role: "Software Engineer",
+      company: "Fordel Studios (A Yellowchalk Company), India",
+      duration: "Jul 2026 – Sep 2026",
+      description: [
+        "Contributed to building a high-scale OTT platform with interactive and performance-focused frontend experiences using React.js and Next.js.",
+        "Leveraged AI-assisted development workflows to accelerate development, optimize code, and improve engineering efficiency.",
+      ],
+    },
+    {
       role: "Associate Developer",
       company: "Appycodes Technologies LLP, India",
-      duration: "Aug 2025 – Present",
+      duration: "Aug 2025 – Feb 2026",
       description: [
-        "Built and maintained React Native mobile apps and web applications.",
-        "Delivered medical-domain mobile applications with optimized UI and smooth performance.",
-        "Developed a web-based Ad Manager system for organizational use.",
-        "Improved app responsiveness and user experience through UI optimization.",
+        "Developed and maintained production applications for pharmaceutical and healthcare clients, supporting multiple users and client-specific workflows.",
+        "Built features across mobile applications, social-media platforms, and admin panels using React Native, React.js, and REST APIs.",
+        "Worked on scalable, responsive interfaces and optimized application performance while collaborating with teams through Git/GitHub.",
       ],
     },
     {
       role: "Full Stack Developer Intern",
       company: "Edunet Foundation, India",
       duration: "Dec 2024 – Jan 2025",
-      description: [],
+      description: [
+        "Contributed to full-stack web application development and API integrations.",
+      ],
     },
   ],
   projects: [
     {
-      name: "Prime Website",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop", // Cyberpunk Green/Black
+      name: "The Darjeeling – Interactive Storytelling Website",
       description:
-        "Animated energy drink product showcase using React.js, Tailwind CSS, and GSAP, achieving smooth 60 fps animations.",
+        "Built an interactive storytelling website using React.js, WebGL, and advanced frontend animations with a focus on immersive design, performance, and user experience.",
       links: [
-        { label: "GitHub", url: "https://github.com/CyberSparkx" }, // Placeholder based on email username
-        { label: "Live Demo", url: "#" },
+        { label: "Live Demo", url: "https://the-darjeeling.vercel.app" },
+        { label: "GitHub", url: "https://github.com/CyberSparkx" },
       ],
     },
     {
-      name: "Granger – Brand Website",
-      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop", // Abstract Green Grid
+      name: "OpenScreen – Open Source Contribution",
       description:
-        "Animation-rich volleyball brand site built with React.js and GSAP, connected to backend API for real-time product updates.",
+        "Contributed to OpenScreen, an open-source screen recording and product-demo application. Added accessibility improvements by adding labels to recording controls for assistive technology.",
       links: [
         { label: "GitHub", url: "https://github.com/CyberSparkx" },
-        { label: "Live Demo", url: "#" },
-      ],
-    },
-    {
-      name: "NANA",
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop", // Dark Tech Network
-      description:
-        "Cold drink brand web app developed with React.js, Tailwind CSS, and GSAP animations, integrating REST APIs to boost engagement.",
-      links: [
-        { label: "GitHub", url: "https://github.com/CyberSparkx" },
-        { label: "Live Demo", url: "#" },
       ],
     },
   ],

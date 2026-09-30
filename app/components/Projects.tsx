@@ -1,532 +1,471 @@
 "use client";
 
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
-import { Github, ExternalLink } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Sparkles,
+  Layers,
+  ArrowUpRight,
+  GitPullRequest,
+  Compass,
+  MonitorPlay,
+  CheckCircle,
+} from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
-/* ─────────────────────────────────────────────
-   Inline SVG graphics — each represents the
-   project's visual identity / concept
-───────────────────────────────────────────── */
-
-const PrimeGraphic = () => (
-  <svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <defs>
-      <radialGradient id="pg1" cx="50%" cy="50%" r="60%">
-        <stop offset="0%" stopColor="#f97316" stopOpacity="0.25" />
-        <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0" />
-      </radialGradient>
-      <radialGradient id="pg2" cx="30%" cy="70%" r="50%">
-        <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.15" />
-        <stop offset="100%" stopColor="#0a0a0a" stopOpacity="0" />
-      </radialGradient>
-      <filter id="glow1">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-    </defs>
-
-    {/* Background */}
-    <rect width="480" height="320" fill="#0c0a09" />
-    <ellipse cx="240" cy="160" rx="220" ry="160" fill="url(#pg1)" />
-    <ellipse cx="100" cy="250" rx="150" ry="120" fill="url(#pg2)" />
-
-    {/* Grid lines */}
-    {[0,1,2,3,4,5].map(i => (
-      <line key={i} x1={i*80} y1="0" x2={i*80} y2="320" stroke="#f9731608" strokeWidth="1" />
-    ))}
-    {[0,1,2,3].map(i => (
-      <line key={i} x1="0" y1={i*80} x2="480" y2={i*80} stroke="#f9731608" strokeWidth="1" />
-    ))}
-
-    {/* Central bottle silhouette */}
-    <g transform="translate(200, 30)" filter="url(#glow1)">
-      {/* Bottle neck */}
-      <rect x="28" y="0" width="24" height="40" rx="6" fill="#1c1917" stroke="#f97316" strokeWidth="1.5" />
-      {/* Bottle body */}
-      <rect x="10" y="36" width="60" height="180" rx="18" fill="#1c1917" stroke="#f97316" strokeWidth="1.5" />
-      {/* Label */}
-      <rect x="18" y="80" width="44" height="80" rx="6" fill="#f97316" opacity="0.15" />
-      <text x="40" y="115" textAnchor="middle" fill="#f97316" fontSize="9" fontFamily="monospace" fontWeight="bold" letterSpacing="2">PRIME</text>
-      {/* Shine */}
-      <rect x="18" y="44" width="8" height="160" rx="4" fill="white" opacity="0.04" />
-    </g>
-
-    {/* Floating UI element — browser mockup */}
-    <g transform="translate(10, 40)" opacity="0.7">
-      <rect width="140" height="90" rx="8" fill="#1c1917" stroke="#f9731630" strokeWidth="1" />
-      <rect width="140" height="18" rx="8" fill="#f9731615" />
-      <circle cx="10" cy="9" r="3" fill="#ef4444" opacity="0.7" />
-      <circle cx="22" cy="9" r="3" fill="#f59e0b" opacity="0.7" />
-      <circle cx="34" cy="9" r="3" fill="#22c55e" opacity="0.7" />
-      <rect x="8" y="26" width="80" height="4" rx="2" fill="#f9731630" />
-      <rect x="8" y="36" width="120" height="4" rx="2" fill="#f9731318" />
-      <rect x="8" y="46" width="100" height="4" rx="2" fill="#f9731318" />
-      <rect x="8" y="56" width="60" height="4" rx="2" fill="#f9731318" />
-      <rect x="8" y="68" width="90" height="4" rx="2" fill="#f9731318" />
-    </g>
-
-    {/* Floating tags */}
-    <g transform="translate(330, 60)" opacity="0.85">
-      <rect width="90" height="26" rx="13" fill="#f97316" opacity="0.12" stroke="#f9731640" strokeWidth="1" />
-      <text x="45" y="17" textAnchor="middle" fill="#f97316" fontSize="9" fontFamily="monospace" letterSpacing="2">GSAP</text>
-    </g>
-    <g transform="translate(340, 100)" opacity="0.7">
-      <rect width="80" height="26" rx="13" fill="#f97316" opacity="0.08" stroke="#f9731630" strokeWidth="1" />
-      <text x="40" y="17" textAnchor="middle" fill="#f97316" fontSize="9" fontFamily="monospace" letterSpacing="2">LENIS</text>
-    </g>
-    <g transform="translate(320, 140)" opacity="0.6">
-      <rect width="100" height="26" rx="13" fill="#f97316" opacity="0.08" stroke="#f9731330" strokeWidth="1" />
-      <text x="50" y="17" textAnchor="middle" fill="#f97316" fontSize="9" fontFamily="monospace" letterSpacing="2">REACT</text>
-    </g>
-
-    {/* Waveform at bottom */}
-    <polyline
-      points="0,290 30,270 60,295 90,265 120,285 150,255 180,280 210,260 240,285 270,258 300,282 330,262 360,280 390,265 420,283 450,268 480,275"
-      fill="none" stroke="#f97316" strokeWidth="1.5" opacity="0.3"
-    />
-
-    {/* Bottom text */}
-    <text x="240" y="312" textAnchor="middle" fill="#f97316" fontSize="8" fontFamily="monospace" opacity="0.4" letterSpacing="4">
-      ANIMATION-DRIVEN EXPERIENCE
-    </text>
-  </svg>
-);
-
-const NanaGraphic = () => (
-  <svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <defs>
-      <radialGradient id="ng1" cx="50%" cy="40%" r="60%">
-        <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.2" />
-        <stop offset="100%" stopColor="#020617" stopOpacity="0" />
-      </radialGradient>
-      <radialGradient id="ng2" cx="80%" cy="80%" r="50%">
-        <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.12" />
-        <stop offset="100%" stopColor="#020617" stopOpacity="0" />
-      </radialGradient>
-      <filter id="glow2">
-        <feGaussianBlur stdDeviation="5" result="coloredBlur" />
-        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-    </defs>
-
-    {/* Background */}
-    <rect width="480" height="320" fill="#020617" />
-    <ellipse cx="240" cy="140" rx="230" ry="170" fill="url(#ng1)" />
-    <ellipse cx="380" cy="280" rx="180" ry="120" fill="url(#ng2)" />
-
-    {/* Dot matrix */}
-    {Array.from({length: 8}).map((_, row) =>
-      Array.from({length: 12}).map((_, col) => (
-        <circle
-          key={`${row}-${col}`}
-          cx={col * 40 + 20}
-          cy={row * 40 + 20}
-          r="1"
-          fill="#22d3ee"
-          opacity="0.08"
-        />
-      ))
-    )}
-
-    {/* Fruit / organic shapes — NANA = beverage brand */}
-    <g transform="translate(170, 20)" filter="url(#glow2)">
-      {/* Can body */}
-      <rect x="25" y="30" width="70" height="180" rx="16" fill="#0f172a" stroke="#22d3ee" strokeWidth="1.5" />
-      {/* Can top / bottom rounded edge */}
-      <ellipse cx="60" cy="30" rx="35" ry="10" fill="#1e293b" stroke="#22d3ee" strokeWidth="1" />
-      <ellipse cx="60" cy="210" rx="35" ry="10" fill="#0f172a" stroke="#22d3ee" strokeWidth="1" />
-      {/* Label area */}
-      <rect x="30" y="70" width="60" height="100" rx="4" fill="#22d3ee" opacity="0.08" />
-      {/* NANA text */}
-      <text x="60" y="118" textAnchor="middle" fill="#22d3ee" fontSize="14" fontFamily="serif" fontWeight="bold" letterSpacing="4">NANA</text>
-      <text x="60" y="133" textAnchor="middle" fill="#22d3ee" fontSize="7" fontFamily="monospace" letterSpacing="3" opacity="0.6">BEVERAGE</text>
-      {/* Shine */}
-      <rect x="30" y="38" width="10" height="164" rx="5" fill="white" opacity="0.03" />
-      {/* Pull tab */}
-      <ellipse cx="60" cy="24" rx="8" ry="4" fill="none" stroke="#22d3ee" strokeWidth="1" opacity="0.6" />
-    </g>
-
-    {/* Splash / liquid circles */}
-    <circle cx="320" cy="80" r="40" fill="none" stroke="#22d3ee" strokeWidth="1" opacity="0.12" />
-    <circle cx="320" cy="80" r="28" fill="none" stroke="#22d3ee" strokeWidth="1" opacity="0.08" />
-    <circle cx="320" cy="80" r="14" fill="#22d3ee" opacity="0.1" />
-
-    <circle cx="80" cy="240" r="30" fill="none" stroke="#a78bfa" strokeWidth="1" opacity="0.15" />
-    <circle cx="80" cy="240" r="18" fill="#a78bfa" opacity="0.06" />
-
-    {/* Pixel-art fruit accents */}
-    {/* Lemon slice */}
-    <g transform="translate(350, 160)" opacity="0.5">
-      <circle cx="0" cy="0" r="22" fill="none" stroke="#fde047" strokeWidth="1" />
-      <circle cx="0" cy="0" r="16" fill="#fde04710" />
-      <line x1="0" y1="-16" x2="0" y2="16" stroke="#fde047" strokeWidth="0.8" opacity="0.4" />
-      <line x1="-16" y1="0" x2="16" y2="0" stroke="#fde047" strokeWidth="0.8" opacity="0.4" />
-      <line x1="-11" y1="-11" x2="11" y2="11" stroke="#fde047" strokeWidth="0.8" opacity="0.4" />
-      <line x1="11" y1="-11" x2="-11" y2="11" stroke="#fde047" strokeWidth="0.8" opacity="0.4" />
-    </g>
-
-    {/* Floating tag */}
-    <g transform="translate(30, 60)" opacity="0.8">
-      <rect width="100" height="26" rx="13" fill="#22d3ee" opacity="0.1" stroke="#22d3ee40" strokeWidth="1" />
-      <text x="50" y="17" textAnchor="middle" fill="#22d3ee" fontSize="9" fontFamily="monospace" letterSpacing="2">TAILWIND</text>
-    </g>
-    <g transform="translate(20, 96)" opacity="0.65">
-      <rect width="80" height="26" rx="13" fill="#22d3ee" opacity="0.07" stroke="#22d3ee30" strokeWidth="1" />
-      <text x="40" y="17" textAnchor="middle" fill="#22d3ee" fontSize="9" fontFamily="monospace" letterSpacing="2">GSAP</text>
-    </g>
-
-    {/* Bottom wave */}
-    <path d="M0,295 Q60,270 120,290 T240,278 T360,288 T480,272 V320 H0 Z" fill="#22d3ee" opacity="0.04" />
-
-    <text x="240" y="313" textAnchor="middle" fill="#22d3ee" fontSize="8" fontFamily="monospace" opacity="0.35" letterSpacing="4">
-      PIXEL-PERFECT FRONTEND
-    </text>
-  </svg>
-);
-
-const DraakshGraphic = () => (
-  <svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-    <defs>
-      <radialGradient id="dg1" cx="50%" cy="50%" r="65%">
-        <stop offset="0%" stopColor="#a855f7" stopOpacity="0.2" />
-        <stop offset="100%" stopColor="#09090b" stopOpacity="0" />
-      </radialGradient>
-      <filter id="glow3">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-    </defs>
-
-    <rect width="480" height="320" fill="#09090b" />
-    <ellipse cx="240" cy="160" rx="240" ry="180" fill="url(#dg1)" />
-
-    {/* Hexagonal grid accent */}
-    {[0,1,2].map(row =>
-      [0,1,2,3,4].map(col => {
-        const x = col * 90 + (row % 2 === 0 ? 0 : 45);
-        const y = row * 78 - 20;
-        const pts = Array.from({length: 6}, (_, i) => {
-          const angle = (Math.PI / 3) * i - Math.PI / 6;
-          return `${x + 34 * Math.cos(angle)},${y + 34 * Math.sin(angle)}`;
-        }).join(' ');
-        return <polygon key={`${row}-${col}`} points={pts} fill="none" stroke="#a855f7" strokeWidth="0.5" opacity="0.07" />;
-      })
-    )}
-
-    {/* Conference stage / podium illustration */}
-    <g transform="translate(120, 50)" filter="url(#glow3)">
-      {/* Screen */}
-      <rect x="30" y="0" width="180" height="110" rx="8" fill="#18181b" stroke="#a855f7" strokeWidth="1.5" />
-      {/* Screen content — bar chart */}
-      <rect x="45" y="70" width="18" height="30" rx="3" fill="#a855f7" opacity="0.4" />
-      <rect x="72" y="50" width="18" height="50" rx="3" fill="#a855f7" opacity="0.6" />
-      <rect x="99" y="30" width="18" height="70" rx="3" fill="#a855f7" opacity="0.8" />
-      <rect x="126" y="45" width="18" height="55" rx="3" fill="#a855f7" opacity="0.5" />
-      <rect x="153" y="60" width="18" height="40" rx="3" fill="#a855f7" opacity="0.35" />
-      <text x="120" y="14" textAnchor="middle" fill="#a855f7" fontSize="9" fontFamily="monospace" letterSpacing="3" opacity="0.6">DRAAKSH × SILIGURI</text>
-
-      {/* Stand */}
-      <rect x="108" y="110" width="24" height="30" rx="2" fill="#27272a" />
-      <rect x="80" y="138" width="80" height="8" rx="4" fill="#27272a" stroke="#a855f740" strokeWidth="1" />
-
-      {/* Audience rows (dots) */}
-      {[0,1,2].map(row =>
-        [0,1,2,3,4,5,6,7].map(col => (
-          <circle
-            key={`aud-${row}-${col}`}
-            cx={col * 26 + 10}
-            cy={row * 16 + 160}
-            r="5"
-            fill="#a855f7"
-            opacity={0.15 - row * 0.04}
-          />
-        ))
-      )}
-    </g>
-
-    {/* Location pin */}
-    <g transform="translate(380, 50)" opacity="0.7" filter="url(#glow3)">
-      <path d="M20,0 C9,0 0,9 0,20 C0,35 20,55 20,55 C20,55 40,35 40,20 C40,9 31,0 20,0Z"
-        fill="#a855f7" opacity="0.15" stroke="#a855f7" strokeWidth="1.5" />
-      <circle cx="20" cy="20" r="7" fill="#a855f7" opacity="0.5" />
-    </g>
-
-    {/* Tags */}
-    <g transform="translate(20, 220)" opacity="0.8">
-      <rect width="90" height="26" rx="13" fill="#a855f7" opacity="0.1" stroke="#a855f740" strokeWidth="1" />
-      <text x="45" y="17" textAnchor="middle" fill="#a855f7" fontSize="9" fontFamily="monospace" letterSpacing="2">VITE+TS</text>
-    </g>
-    <g transform="translate(120, 220)" opacity="0.65">
-      <rect width="80" height="26" rx="13" fill="#a855f7" opacity="0.07" stroke="#a855f730" strokeWidth="1" />
-      <text x="40" y="17" textAnchor="middle" fill="#a855f7" fontSize="9" fontFamily="monospace" letterSpacing="2">SHADCN</text>
-    </g>
-
-    <text x="240" y="313" textAnchor="middle" fill="#a855f7" fontSize="8" fontFamily="monospace" opacity="0.35" letterSpacing="4">
-      TECH CONFERENCE · SILIGURI
-    </text>
-  </svg>
-);
-
-/* ─────────────────────────────────────────────
-   Project data
-───────────────────────────────────────────── */
-const projects = [
+const PROJECTS_FROM_RESUME = [
   {
     index: "01",
-    name: "Prime",
-    subtitle: "Brand Website Reimagined",
-    description:
-      "Reimagined the Prime brand website with a modern animation-driven UI — multi-page transitions, smooth scrolling with Lenis, and optimized media delivery.",
-    tags: ["React.js", "GSAP", "Lenis", "Tailwind CSS"],
-    accent: "#f97316",
-    links: [
-      { label: "GitHub", url: "https://github.com/CyberSparkx" },
-      { label: "Live", url: "#" },
+    type: "FEATURED CASE STUDY",
+    name: "The Darjeeling",
+    subtitle: "Interactive Storytelling Website & Immersive WebGL Experience",
+    headline: "An interactive storytelling digital experience celebrating the legacy, culture, and misty Himalayan horizons of Darjeeling.",
+    description: [
+      "Engineered an interactive storytelling website using React.js, WebGL fragment shaders, and advanced frontend animations with a focus on immersive design, performance, and user experience.",
+      "Choreographed smooth 60fps scroll timelines with GSAP and custom fluid physics, immersing users into rich chapter-based regional stories.",
+      "Architected lightweight asset pipelines and responsive canvas rendering ensuring silky-smooth frame budgets across desktop, tablet, and mobile devices.",
     ],
-    Graphic: PrimeGraphic,
-    year: "2024",
+    tags: [
+      "React.js",
+      "WebGL & Shaders",
+      "GSAP ScrollTrigger",
+      "Interactive Storytelling",
+      "Tailwind CSS",
+      "Audio-Visual Choreography",
+    ],
+    metrics: [
+      { label: "Rendering", value: "60 FPS" },
+      { label: "Atmosphere", value: "WebGL" },
+      { label: "Architecture", value: "React" },
+    ],
+    coords: "27.0410° N, 88.2663° E · 2,042M ELEVATION",
+    links: [
+      { label: "View Live Demo", url: "https://the-darjeeling.vercel.app", isPrimary: true },
+      { label: "Source Code", url: "https://github.com/CyberSparkx", isPrimary: false },
+    ],
+    accentColor: "#f5be0b",
   },
   {
     index: "02",
-    name: "NANA",
-    subtitle: "Beverage Brand Website",
-    description:
-      "Pixel-perfect, responsive frontend for a beverage brand. Smooth UI animations via GSAP and Lenis, built with React.js and Tailwind CSS.",
-    tags: ["React.js", "GSAP", "Lenis", "Tailwind CSS"],
-    accent: "#22d3ee",
-    links: [
-      { label: "GitHub", url: "https://github.com/CyberSparkx" },
-      { label: "Live", url: "#" },
+    type: "OPEN SOURCE ECOSYSTEM",
+    name: "OpenScreen",
+    subtitle: "Screen Recording & Product Demo Platform",
+    headline: "An open-source utility platform for seamless screen recording, product presentations, and workflow demonstration.",
+    description: [
+      "Contributed to OpenScreen, an open-source screen recording and product-demo application used by developers and content creators worldwide.",
+      "Engineered critical accessibility improvements by adding robust ARIA labels, assistive technology hooks, and keyboard-accessible recording controls.",
+      "Optimized control bar responsive behaviors and verified seamless screen-reader compliance across modern browser environments.",
     ],
-    Graphic: NanaGraphic,
-    year: "2024",
-  },
-  {
-    index: "03",
-    name: "Draaksh × Siliguri",
-    subtitle: "Tech Event Landing Page",
-    description:
-      "Conference landing page with scroll-driven canvas animations, GSAP + ScrollTrigger + Locomotive Scroll, and a pill-style frosted glass navbar.",
-    tags: ["Vite", "React", "TypeScript", "GSAP", "shadcn/ui"],
-    accent: "#a855f7",
-    links: [
-      { label: "GitHub", url: "https://github.com/CyberSparkx" },
-      { label: "Live", url: "#" },
+    tags: [
+      "Open Source",
+      "Accessibility (WCAG)",
+      "React.js",
+      "MediaRecorder API",
+      "Assistive Controls",
+      "GitHub Ecosystem",
     ],
-    Graphic: DraakshGraphic,
-    year: "2025",
+    metrics: [
+      { label: "Accessibility", value: "100%" },
+      { label: "Ecosystem", value: "GitHub" },
+      { label: "Platform", value: "Web Audio/Video" },
+    ],
+    coords: "OPEN SOURCE · GLOBAL CONTRIBUTORS",
+    links: [
+      { label: "Inspect Repository", url: "https://github.com/CyberSparkx", isPrimary: true },
+      { label: "GitHub Profile", url: "https://github.com/CyberSparkx", isPrimary: false },
+    ],
+    accentColor: "#d97706",
   },
 ];
 
-/* ─────────────────────────────────────────────
-   Component
-───────────────────────────────────────────── */
 export default function Projects() {
-  const container = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
     () => {
-      // Section heading
-      gsap.from(".proj-heading", {
-        scrollTrigger: { trigger: ".proj-heading", start: "top 85%" },
-        clipPath: "inset(0 100% 0 0)",
-        opacity: 0,
-        duration: 1.1,
-        ease: "expo.out",
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+        defaults: { ease: "power3.out" },
       });
 
-      // Marquee (runs on mount, not scroll)
-      gsap.to(".marquee-inner", {
-        xPercent: -50,
-        duration: 18,
-        ease: "none",
-        repeat: -1,
-      });
-
-      // Cards
-      const cards = gsap.utils.toArray<HTMLElement>(".proj-card");
-      cards.forEach((card) => {
-        gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top 88%",
-            toggleActions: "play none none reverse",
-          },
-          y: 80,
-          opacity: 0,
-          duration: 1,
-          ease: "power4.out",
-        });
-
-        // Graphic reveal
-        const graphic = card.querySelector(".proj-graphic");
-        gsap.from(graphic, {
-          scrollTrigger: { trigger: card, start: "top 85%" },
-          scale: 1.08,
-          opacity: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          delay: 0.15,
-        });
-      });
-
-      // Tags
-      gsap.from(".proj-tag", {
-        scrollTrigger: { trigger: container.current, start: "top 70%" },
-        scale: 0.6,
-        opacity: 0,
-        stagger: 0.05,
-        duration: 0.45,
-        ease: "back.out(2)",
-      });
+      // 1. Line expansion
+      tl.fromTo(
+        ".proj-rule",
+        { scaleX: 0, transformOrigin: "left" },
+        { scaleX: 1, duration: 0.8, ease: "power2.inOut" }
+      )
+        // 2. Section tag
+        .fromTo(
+          ".proj-tag",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5 },
+          "-=0.5"
+        )
+        // 3. Headline & paragraph
+        .fromTo(
+          headlineRef.current,
+          { y: 35, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          "-=0.3"
+        )
+        .fromTo(
+          ".proj-desc",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6 },
+          "-=0.4"
+        )
+        // 4. Dossier cards stagger
+        .fromTo(
+          ".proj-dossier-card",
+          { y: 45, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75, stagger: 0.15, ease: "power2.out" },
+          "-=0.3"
+        );
     },
-    { scope: container }
+    { scope: containerRef }
   );
 
   return (
     <section
-      ref={container}
-      className="relative w-full bg-[#09090b] pb-32 overflow-hidden"
+      ref={containerRef}
+      id="projects"
+      className="relative w-full overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none pt-16 pb-24 sm:pt-24 sm:pb-32 md:pt-32 md:pb-40"
+      style={{
+        fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+      }}
     >
-      {/* Ambient blobs */}
+      {/* ── Custom Styling & Grain Injections ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap');
+
+        .proj-paper-grain {
+          background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+          background-size: 4px 4px;
+        }
+
+        .gold-ink-highlight {
+          position: relative;
+          display: inline-block;
+          color: #1c1b18;
+        }
+
+        .gold-ink-highlight::before {
+          content: "";
+          position: absolute;
+          left: -4px;
+          right: -4px;
+          bottom: 4px;
+          height: 32%;
+          background: rgba(245, 190, 11, 0.45);
+          transform: rotate(-1.2deg);
+          z-index: -1;
+          border-radius: 2px;
+          pointer-events: none;
+        }
+
+        .marquee-track {
+          display: flex;
+          width: max-content;
+          animation: projMarquee 26s linear infinite;
+        }
+
+        @keyframes projMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+
+      {/* ── Paper Grain Overlay ── */}
+      <div className="absolute inset-0 w-full h-full proj-paper-grain opacity-25 mix-blend-multiply pointer-events-none z-10" />
+
+      {/* ── Atmospheric Ambient Golden Glow (Painterly Depth) ── */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] opacity-[0.03]"
-        style={{ background: "radial-gradient(ellipse, #fff 0%, transparent 70%)" }}
+        className="absolute top-1/3 left-0 w-[600px] h-[600px] opacity-15 pointer-events-none -ml-44 z-0"
+        style={{
+          background: "radial-gradient(circle, #f5be0b 0%, rgba(245,190,11,0.05) 60%, transparent 75%)",
+          filter: "blur(70px)",
+        }}
+      />
+      <div
+        className="absolute bottom-1/4 right-0 w-[550px] h-[550px] opacity-15 pointer-events-none -mr-40 z-0"
+        style={{
+          background: "radial-gradient(circle, #f5be0b 0%, rgba(245,190,11,0.05) 60%, transparent 75%)",
+          filter: "blur(70px)",
+        }}
       />
 
-      {/* ── Heading ── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-16 pt-28">
-        <p className="text-xs tracking-[0.3em] uppercase text-zinc-500 font-semibold mb-5">
-          Selected Works
-        </p>
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-20">
-          <h2
-            className="proj-heading text-5xl md:text-7xl font-black text-white leading-none tracking-tight"
-            style={{ fontFamily: "'Syne', sans-serif" }}
-          >
-            Projects
-          </h2>
-          <span className="text-zinc-600 font-mono text-sm">
-            {projects.length} case studies
-          </span>
-        </div>
-      </div>
+      <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
+        
+        {/* ── SECTION HEADER & EYEBROW ── */}
+        <div className="flex flex-col gap-3 mb-12 sm:mb-16 md:mb-20">
+          <div className="proj-tag flex items-center gap-3">
+            <span className="proj-rule w-8 sm:w-12 h-[1.5px] bg-[#1c1b18]/70" />
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#47443c]">
+              04 // PORTFOLIO — SELECTED WORKS
+            </span>
+          </div>
 
-      {/* ── Marquee strip ── */}
-      <div className="overflow-hidden border-y border-zinc-800 py-3 mb-20">
-        <div className="marquee-inner flex gap-10 whitespace-nowrap w-max">
-          {[...Array(2)].map((_, outer) =>
-            ["React.js", "GSAP", "TypeScript", "Tailwind CSS", "Lenis", "Node.js", "MongoDB", "React Native", "Vite", "shadcn/ui"].map((item, i) => (
-              <span key={`${outer}-${i}`} className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-600">
-                {item} <span className="text-zinc-700 mx-4">·</span>
-              </span>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* ── Cards grid ── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project) => {
-          const { Graphic } = project;
-          return (
-            <div
-              key={project.index}
-              className="proj-card group relative flex flex-col bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-600 transition-all duration-500 hover:-translate-y-1"
-              style={{ boxShadow: `0 0 0 0 ${project.accent}00` }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = `0 0 40px -10px ${project.accent}30`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 0 ${project.accent}00`;
-              }}
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <h2
+              ref={headlineRef}
+              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#1c1b18] leading-[1.12] max-w-3xl"
             >
-              {/* Graphic area */}
-              <div className="proj-graphic relative w-full overflow-hidden" style={{ aspectRatio: "3/2" }}>
-                <Graphic />
-                {/* Hover overlay */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: `radial-gradient(ellipse at center, ${project.accent}15 0%, transparent 70%)` }}
-                />
-                {/* Year badge */}
-                <span
-                  className="absolute top-4 right-4 text-[10px] font-mono font-bold tracking-widest px-2.5 py-1 rounded-full border"
-                  style={{ color: project.accent, borderColor: `${project.accent}40`, background: `${project.accent}10` }}
-                >
-                  {project.year}
+              Architected for immersion, engineered for{" "}
+              <span className="gold-ink-highlight">performance.</span>
+            </h2>
+
+            <p className="proj-desc text-sm sm:text-[15px] text-[#47443c] max-w-md leading-relaxed font-normal">
+              Featured works and open-source contributions documented directly from my resume, showcasing creative frontend motion, WebGL shaders, and high-standard accessibility.
+            </p>
+          </div>
+        </div>
+
+        {/* ── EDITORIAL MARQUEE TICKER ── */}
+        <div className="overflow-hidden border-y border-[#1c1b18]/10 py-3 mb-14 sm:mb-18">
+          <div className="marquee-track flex gap-8 whitespace-nowrap text-xs font-mono uppercase tracking-[0.22em] text-[#5c574c]">
+            {[...Array(2)].map((_, outer) =>
+              [
+                "The Darjeeling",
+                "WebGL Shaders",
+                "OpenScreen",
+                "WCAG Accessibility",
+                "GSAP 60FPS Timelines",
+                "React 19 & Next.js",
+                "Three.js Canvas",
+                "Kinetic Choreography",
+              ].map((item, i) => (
+                <span key={`${outer}-${i}`} className="flex items-center gap-4">
+                  <span>{item}</span>
+                  <span className="text-[#f5be0b] font-bold">✦</span>
                 </span>
-              </div>
+              ))
+            )}
+          </div>
+        </div>
 
-              {/* Content */}
-              <div className="flex flex-col flex-1 p-6">
-                {/* Index + title */}
-                <div className="flex items-start gap-3 mb-3">
-                  <span className="text-xs font-mono text-zinc-600 mt-1">{project.index}</span>
-                  <div>
-                    <h3
-                      className="text-xl font-black text-white leading-tight transition-colors duration-300"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      {project.name}
-                    </h3>
-                    <p className="text-xs font-medium mt-0.5" style={{ color: project.accent }}>
-                      {project.subtitle}
+        {/* ── PROJECT DOSSIER CARDS (ONLY PROJECTS AVAILABLE AT RESUME) ── */}
+        <div className="flex flex-col gap-10 sm:gap-14 mb-16 sm:mb-20">
+          {PROJECTS_FROM_RESUME.map((proj) => {
+            const isDarjeeling = proj.index === "01";
+
+            return (
+              <div
+                key={proj.index}
+                className="proj-dossier-card group relative rounded-3xl p-7 sm:p-10 md:p-12 transition-all duration-300 bg-[#FAF8F3] border border-[#1c1b18]/12 hover:border-[#f5be0b] hover:shadow-[0_16px_40px_rgba(28,27,24,0.08)] hover:-translate-y-1"
+              >
+                {/* Floating Category Badge */}
+                <div className="absolute top-0 right-8 -translate-y-1/2 px-3.5 py-1 rounded-full bg-[#FAF8F3] border border-[#1c1b18]/15 text-[#1c1b18] text-[10px] font-bold font-mono tracking-widest uppercase flex items-center gap-1.5 shadow-sm group-hover:border-[#f5be0b]">
+                  <Sparkles className="w-3 h-3 text-[#f5be0b]" />
+                  <span>{proj.type}</span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                  
+                  {/* ── Left Column: Title, Narrative & Features (lg:col-span-7) ── */}
+                  <div className="lg:col-span-7 flex flex-col gap-5">
+                    
+                    {/* Index & Coordinates */}
+                    <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#8a8475]">
+                      <span className="font-bold text-[#1c1b18] tracking-widest uppercase">
+                        {proj.index} //
+                      </span>
+                      <span>{proj.coords}</span>
+                    </div>
+
+                    {/* Main Title & Subtitle */}
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#1c1b18] tracking-tight group-hover:text-[#b45309] transition-colors duration-200">
+                        {proj.name}
+                      </h3>
+                      <p className="text-sm sm:text-base font-semibold text-[#5c574c] mt-1">
+                        {proj.subtitle}
+                      </p>
+                    </div>
+
+                    {/* High-level Headline */}
+                    <p className="text-xs sm:text-sm text-[#38352e] font-medium leading-relaxed bg-[#EAE6DC]/60 p-3.5 rounded-xl border border-[#1c1b18]/8">
+                      {proj.headline}
                     </p>
+
+                    {/* Resume Bullet Points */}
+                    <ul className="flex flex-col gap-2.5">
+                      {proj.description.map((bullet, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2.5 text-xs sm:text-sm text-[#423e35] leading-relaxed select-text"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#f5be0b] shrink-0 mt-2" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Tech Stack Pills */}
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 border-t border-[#1c1b18]/8">
+                      {proj.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold tracking-wide bg-[#EAE6DC] text-[#2c2923] border border-[#1c1b18]/8 group-hover:border-[#1c1b18]/15 hover:!bg-[#f5be0b]/20 hover:!text-[#1c1b18] hover:!border-[#f5be0b]/60 transition-all cursor-default select-text"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Links & CTA Bar */}
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 mt-2">
+                      {proj.links.map((link) => (
+                        <a
+                          key={link.label}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer shadow-sm ${
+                            link.isPrimary
+                              ? "bg-[#1c1b18] text-[#E6E2D7] hover:bg-[#b45309] hover:shadow-md"
+                              : "border border-[#1c1b18]/25 text-[#1c1b18] hover:bg-[#1c1b18]/10"
+                          }`}
+                        >
+                          {link.label.includes("Code") || link.label.includes("GitHub") ? (
+                            <Github className="w-3.5 h-3.5" />
+                          ) : (
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          )}
+                          <span>{link.label}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </a>
+                      ))}
+                    </div>
+
                   </div>
-                </div>
 
-                {/* Description */}
-                <p className="text-zinc-500 text-sm leading-relaxed mb-5 flex-1">
-                  {project.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="proj-tag text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full border border-zinc-700 text-zinc-400"
+                  {/* ── Right Column: Architectural Visual Badge & Metrics (lg:col-span-5) ── */}
+                  <div className="lg:col-span-5 flex flex-col gap-5 w-full">
+                    
+                    {/* Visual Feature Canvas / Illustration */}
+                    <div
+                      className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-[#1c1b18]/10 flex flex-col justify-between p-6 select-none"
+                      style={{
+                        background: isDarjeeling
+                          ? "linear-gradient(135deg, #1c1b18 0%, #2a2822 50%, #3d382f 100%)"
+                          : "linear-gradient(135deg, #181714 0%, #262420 50%, #33302a 100%)",
+                      }}
                     >
-                      {tag}
-                    </span>
-                  ))}
+                      {/* Atmospheric Mountain / Screen Motif Overlay */}
+                      <div className="absolute inset-0 opacity-20 pointer-events-none">
+                        <svg viewBox="0 0 400 250" className="w-full h-full" preserveAspectRatio="none">
+                          <defs>
+                            <linearGradient id={`goldGrad-${proj.index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#f5be0b" stopOpacity="0.4" />
+                              <stop offset="100%" stopColor="#d97706" stopOpacity="0.05" />
+                            </linearGradient>
+                          </defs>
+                          {isDarjeeling ? (
+                            // Mountain peaks silhouette
+                            <polygon points="0,250 80,110 160,180 250,80 340,170 400,100 400,250" fill={`url(#goldGrad-${proj.index})`} />
+                          ) : (
+                            // Screen recording frame motif
+                            <g fill="none" stroke="#f5be0b" strokeWidth="1.5" opacity="0.3">
+                              <rect x="40" y="30" width="320" height="190" rx="12" />
+                              <circle cx="200" cy="125" r="28" strokeDasharray="4 4" />
+                            </g>
+                          )}
+                        </svg>
+                      </div>
+
+                      {/* Top Bar inside Art Preview */}
+                      <div className="relative z-10 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#f5be0b] animate-ping" />
+                          <span className="text-[10px] font-mono tracking-widest uppercase text-[#E6E2D7]/80">
+                            {isDarjeeling ? "WEBGL CANVAS ENGINE" : "A11Y ACCESSIBILITY SYSTEM"}
+                          </span>
+                        </div>
+                        <div className="px-2.5 py-0.5 rounded-full bg-black/40 border border-white/10 text-[9px] font-mono text-[#f5be0b]">
+                          {isDarjeeling ? "IMMERSIVE 3D" : "OPEN SOURCE"}
+                        </div>
+                      </div>
+
+                      {/* Center Display Art Callout */}
+                      <div className="relative z-10 my-auto text-center py-4">
+                        <span className="text-2xl sm:text-3xl font-black text-[#FAF8F3] tracking-wider uppercase font-['Outfit'] block">
+                          {isDarjeeling ? "THE DARJEELING" : "OPENSCREEN"}
+                        </span>
+                        <span className="text-[10px] font-mono tracking-[0.25em] text-[#f5be0b] uppercase mt-1 block opacity-90">
+                          {isDarjeeling ? "STORYTELLING ARTIFACT" : "COMMUNITY PIPELINE"}
+                        </span>
+                      </div>
+
+                      {/* Bottom Bar inside Art Preview */}
+                      <div className="relative z-10 flex items-center justify-between text-[9px] font-mono text-[#E6E2D7]/60 pt-2 border-t border-white/10">
+                        <span>FPS: 60 LOCKED</span>
+                        <span>STATUS: LIVE IN PRODUCTION</span>
+                      </div>
+                    </div>
+
+                    {/* 3 Metric Plaque Tiles */}
+                    <div className="grid grid-cols-3 gap-3">
+                      {proj.metrics.map((m) => (
+                        <div
+                          key={m.label}
+                          className="bg-[#EAE6DC]/70 border border-[#1c1b18]/8 rounded-xl p-3 flex flex-col gap-0.5 text-center"
+                        >
+                          <span className="text-base sm:text-lg font-black text-[#1c1b18] tracking-tight">
+                            {m.value}
+                          </span>
+                          <span className="text-[10px] font-mono tracking-wider uppercase text-[#666052]">
+                            {m.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                  </div>
+
                 </div>
 
-                {/* Links */}
-                <div className="flex gap-4 pt-4 border-t border-zinc-800">
-                  {project.links.map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-white transition-colors duration-200"
-                    >
-                      {link.label === "GitHub" ? (
-                        <Github size={13} />
-                      ) : (
-                        <ExternalLink size={13} />
-                      )}
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&display=swap');
-      `}</style>
+        {/* ── BOTTOM RIBBON: GITHUB ARCHIVE DIRECTORY ── */}
+        <div className="w-full">
+          <div className="w-full h-px bg-[#1c1b18]/15 mb-6" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono tracking-wider text-[#6b6557]">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-[#f5be0b]" />
+              <span>CURATED DIRECTLY FROM NAREN ROY CV / RESUME ARCHIVE</span>
+            </div>
+
+            <a
+              href="https://github.com/CyberSparkx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#1c1b18] hover:text-[#b45309] transition-colors cursor-pointer group"
+            >
+              <span>Explore All Repositories on GitHub</span>
+              <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 }

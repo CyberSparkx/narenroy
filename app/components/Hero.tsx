@@ -112,52 +112,6 @@ export default function Hero() {
           ease: "sine.inOut",
         });
       }
-
-      // Smooth Creative Scroll Exit Parallax & Dissolve
-      if (desktopArtRef.current) {
-        gsap.to(desktopArtRef.current, {
-          yPercent: 12,
-          opacity: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.6,
-          },
-        });
-      }
-
-      if (mobileArtRef.current) {
-        gsap.to(mobileArtRef.current, {
-          y: 24,
-          opacity: 0.15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.6,
-          },
-        });
-      }
-
-      // Hero text subtle float-up on scroll
-      const textGroup = [eyebrowRef.current, headlineRef.current, contactRef.current, quoteRef.current].filter(Boolean);
-      if (textGroup.length > 0) {
-        gsap.to(textGroup, {
-          y: -25,
-          opacity: 0.25,
-          stagger: 0.02,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "30% top",
-            end: "bottom top",
-            scrub: 0.5,
-          },
-        });
-      }
     },
     { scope: containerRef }
   );
@@ -277,13 +231,7 @@ export default function Hero() {
       </header>
 
       {/* ── DESKTOP FULL-BLEED ARTWORK WITH INTERACTIVE WEBGL SHADER (Desktop Only: lg:block) ── */}
-      <div 
-        className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
-        style={{
-          maskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.3) 80%, transparent 94%)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.3) 80%, transparent 94%)",
-        }}
-      >
+      <div className="hidden lg:block absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <div
           ref={desktopArtRef}
           className="absolute inset-0 w-full h-full pointer-events-auto z-10"
@@ -294,11 +242,6 @@ export default function Hero() {
           />
         </div>
       </div>
-
-      {/* ── Seamless Parchment Feathering at Fold (Soft Ink Bleed into About) ── */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 h-44 sm:h-56 md:h-72 bg-gradient-to-b from-transparent via-[#E6E2D7]/65 via-60% to-[#E6E2D7] pointer-events-none z-20"
-      />
 
       {/* ── MAIN CONTENT (LEFT COLUMN ON DESKTOP, VERTICAL FLOW ON TABLET & MOBILE) ── */}
       <div className="hero-main-row relative z-30 w-full flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-10 lg:px-16 py-3 md:py-4 lg:py-6 my-auto pointer-events-none">
@@ -330,10 +273,6 @@ export default function Hero() {
           <div
             ref={mobileArtRef}
             className="hero-portrait-art lg:hidden relative w-full max-w-[290px] sm:max-w-[340px] md:max-w-[540px] aspect-[4/3] md:aspect-[16/11] mx-auto my-2.5 sm:my-4 md:my-6 overflow-hidden rounded-xl"
-            style={{
-              maskImage: "linear-gradient(to bottom, black 0%, black 72%, rgba(0,0,0,0.5) 86%, transparent 98%)",
-              WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 72%, rgba(0,0,0,0.5) 86%, transparent 98%)",
-            }}
           >
             <div className="absolute inset-0 w-full h-full">
               <Image
@@ -440,6 +379,14 @@ export default function Hero() {
 
       </div>
 
+      {/* ── BOTTOM WHITE BLEND (TRANSPARENT TO WHITE) ── */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-28 sm:h-36 md:h-44 lg:h-52 pointer-events-none z-20"
+        style={{
+          background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 1) 100%)",
+        }}
+      />
+
       {/* ── FOOTER / FOLD ACCENTS ── */}
       <footer className="relative z-30 w-full px-4 sm:px-8 md:px-10 lg:px-16 pb-4 sm:pb-5 md:pb-6 flex items-end justify-between shrink-0">
         {/* Bottom Left: Scroll To Explore */}
@@ -463,7 +410,7 @@ export default function Hero() {
         {/* Bottom Right: Siliguri, India */}
         <div
           ref={locationRef}
-          className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] md:text-[11px] font-bold tracking-[0.16em] sm:tracking-[0.2em] uppercase text-[#1c1b18] md:text-[#f8f5ee] pointer-events-auto"
+          className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] md:text-[11px] font-bold tracking-[0.16em] sm:tracking-[0.2em] uppercase text-[#1c1b18] pointer-events-auto"
         >
           <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#f5be0b] shadow-[0_0_8px_#f5be0b] shrink-0" />
           <span>SILIGURI, INDIA</span>
