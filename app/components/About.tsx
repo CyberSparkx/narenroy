@@ -1,284 +1,319 @@
 "use client";
 
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
-import { portfolioData } from "../data/portfolio";
+import { Sparkles, Compass, Cpu, Layers, Terminal } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const STATS = [
-  { value: "3+",  label: "Years Learning" },
-  { value: "10+", label: "Projects Built" },
-  { value: "5+",  label: "Tech Stacks"    },
-  { value: "∞",   label: "Lines of Code"  },
+const DISCIPLINES = [
+  {
+    num: "01",
+    title: "Creative Frontend Architecture",
+    tags: ["React 19", "Next.js", "TypeScript", "Tailwind"],
+    description:
+      "Transforming bespoke design systems into high-performance, accessible, and responsive interfaces with clean, scalable component architecture.",
+    icon: Layers,
+  },
+  {
+    num: "02",
+    title: "Kinetic Motion & GSAP Choreography",
+    tags: ["GSAP Core", "ScrollTrigger", "Lenis", "Physics"],
+    description:
+      "Choreographing silky smooth scroll-driven timelines, inertia transitions, and micro-interactions that give static pixels physical weight and responsiveness.",
+    icon: Sparkles,
+  },
+  {
+    num: "03",
+    title: "Shader Computation & WebGL",
+    tags: ["Three.js", "GLSL Shaders", "Fluid Ripples", "Canvas"],
+    description:
+      "Engineering custom mathematical fragment shaders, water refraction dynamics, and pixelated spatial canvas effects running at steady 60fps.",
+    icon: Cpu,
+  },
+  {
+    num: "04",
+    title: "Full-Stack & Mobile Ecosystems",
+    tags: ["React Native", "Node.js", "REST APIs", "MongoDB"],
+    description:
+      "Developing end-to-end digital solutions ranging from production React Native mobile apps to robust server-side APIs and distributed database workflows.",
+    icon: Terminal,
+  },
 ];
 
-const TAGS = [
-  "React", "Next.js", "TypeScript", "GSAP",
-  "Node.js", "Three.js", "IoT", "Arduino",
+const METRICS = [
+  { value: "03+", label: "Years of Craft", detail: "Dedicated engineering" },
+  { value: "15+", label: "Projects Shipped", detail: "Web, mobile & 3D apps" },
+  { value: "60 FPS", label: "Frame Budget", detail: "Silky smooth performance" },
+  { value: "100%", label: "Obsession with Detail", detail: "Every micro-interaction" },
 ];
 
 export default function About() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const metricsRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 75%",
-        toggleActions: "play none none reverse",
-      },
-      defaults: { ease: "power3.out" },
-    });
+  useGSAP(
+    () => {
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) return;
 
-    tl.from(".ab-label",   { y: 20, opacity: 0, duration: 0.5 })
-      .from(".ab-heading",  { y: 50, opacity: 0, duration: 0.8 }, "-=0.3")
-      .from(".ab-body",     { y: 30, opacity: 0, duration: 0.7 }, "-=0.5")
-      .from(".ab-tag",      { y: 16, opacity: 0, duration: 0.45, stagger: 0.05 }, "-=0.4")
-      .from(".ab-stat",     { y: 24, opacity: 0, duration: 0.5,  stagger: 0.08 }, "-=0.4")
-      .from(".ab-card",     { x: 60, opacity: 0, duration: 0.9,  ease: "expo.out" }, "<-=0.7");
-  }, { scope: containerRef });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+        defaults: { ease: "power3.out" },
+      });
+
+      // 1. Line expansion
+      tl.fromTo(
+        ".about-rule",
+        { scaleX: 0, transformOrigin: "left" },
+        { scaleX: 1, duration: 0.85, ease: "power2.inOut", stagger: 0.1 }
+      )
+        // 2. Section tag & eyebrow
+        .fromTo(
+          ".about-tag",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5 },
+          "-=0.5"
+        )
+        // 3. Main editorial headline
+        .fromTo(
+          headlineRef.current,
+          { y: 35, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.3"
+        )
+        // 4. Narrative body text
+        .fromTo(
+          ".about-narrative",
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, stagger: 0.15 },
+          "-=0.5"
+        )
+        // 5. Discipline cards
+        .fromTo(
+          ".about-craft-card",
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, stagger: 0.12, ease: "power2.out" },
+          "-=0.4"
+        )
+        // 6. Metrics ledger
+        .fromTo(
+          ".about-metric-item",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
+          "-=0.3"
+        );
+    },
+    { scope: containerRef }
+  );
 
   return (
     <section
       ref={containerRef}
       id="about"
-      className="relative w-full overflow-hidden py-24 md:py-32"
-      style={{ background: "#0a0a0f", fontFamily: "'Syne', sans-serif" }}
+      className="relative w-full overflow-hidden bg-[#E6E2D7] text-[#1c1b18] select-none py-20 sm:py-28 md:py-36 border-t border-[#1c1b18]/10"
+      style={{
+        fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+      }}
     >
+      {/* ── Typography & Grain Injections ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        .mono { font-family: 'Space Mono', monospace; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .cursor-blink { animation: blink 1.1s step-end infinite; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap');
+
+        .about-paper-grain {
+          background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+          background-size: 4px 4px;
+        }
+
+        .gold-ink-highlight {
+          position: relative;
+          display: inline-block;
+          color: #1c1b18;
+        }
+
+        .gold-ink-highlight::before {
+          content: "";
+          position: absolute;
+          left: -4px;
+          right: -4px;
+          bottom: 4px;
+          height: 32%;
+          background: rgba(245, 190, 11, 0.45);
+          transform: rotate(-1.2deg);
+          z-index: -1;
+          border-radius: 2px;
+          pointer-events: none;
+        }
       `}</style>
 
-      {/* ── Grid background ── */}
+      {/* ── Texture Overlay ── */}
+      <div className="absolute inset-0 w-full h-full about-paper-grain opacity-25 mix-blend-multiply pointer-events-none z-10" />
+
+      {/* ── Subtle Atmospheric Yellow Brush Accent in Background ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute top-1/4 right-0 w-[500px] h-[500px] opacity-15 pointer-events-none -mr-48 z-0"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(61,139,255,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(61,139,255,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
+          background: "radial-gradient(circle, #f5be0b 0%, rgba(245,190,11,0.05) 60%, transparent 75%)",
+          filter: "blur(60px)",
         }}
       />
 
-      {/* ── Ambient glow ── */}
-      <div
-        className="absolute -top-48 -left-48 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(61,139,255,0.10) 0%, transparent 70%)" }}
-      />
-      <div
-        className="absolute -bottom-48 -right-48 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(61,139,255,0.06) 0%, transparent 70%)" }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-
-        {/* ── Section label ── */}
-        <div className="ab-label mono flex items-center gap-3 mb-8">
-          <span className="w-8 h-px" style={{ background: "#3d8bff" }} />
-          <span className="text-xs tracking-[0.3em] uppercase" style={{ color: "#3d8bff" }}>Who I Am</span>
-        </div>
-
-        {/* ── Two-column grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-start">
-
-          {/* ── LEFT: Text ── */}
-          <div className="flex flex-col gap-8">
-
-            {/* Heading */}
-            <h2
-              className="ab-heading text-white font-extrabold leading-[1.05] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)" }}
-            >
-              Building with<br />
-              <span style={{ color: "#3d8bff" }}>intention.</span>
-            </h2>
-
-            {/* Summary */}
-            <p
-              className="ab-body mono text-white/50 leading-[1.85]"
-              style={{ fontSize: "clamp(0.78rem, 1.05vw, 0.9rem)", maxWidth: "460px" }}
-            >
-              {portfolioData.personalInfo.summary}
-            </p>
-
-            {/* Tech tags */}
-            <div className="flex flex-wrap gap-2">
-              {TAGS.map((tag) => (
-                <span
-                  key={tag}
-                  className="ab-tag mono text-[11px] tracking-wider px-3 py-1.5 rounded-full cursor-default transition-all duration-300"
-                  style={{
-                    color: "rgba(255,255,255,0.5)",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = "white";
-                    e.currentTarget.style.borderColor = "rgba(61,139,255,0.5)";
-                    e.currentTarget.style.background = "rgba(61,139,255,0.08)";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                    e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Stats */}
-            <div
-              className="grid grid-cols-4 gap-6 pt-6"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-            >
-              {STATS.map((s) => (
-                <div key={s.label} className="ab-stat flex flex-col gap-1">
-                  <span
-                    className="font-extrabold"
-                    style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)", color: "#3d8bff" }}
-                  >
-                    {s.value}
-                  </span>
-                  <span className="mono text-white/30 text-[10px] leading-tight tracking-wider uppercase">
-                    {s.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+      <div className="relative z-20 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
+        
+        {/* ── SECTION HEADER & EYEBROW ── */}
+        <div className="flex flex-col gap-3 mb-12 sm:mb-16 md:mb-20">
+          <div className="about-tag flex items-center gap-3">
+            <span className="w-8 sm:w-12 h-[1.5px] bg-[#1c1b18]/70" />
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#47443c]">
+              01 // WHO I AM — THE PHILOSOPHY
+            </span>
           </div>
 
-          {/* ── RIGHT: Code card ── */}
-          <div className="ab-card relative">
+          <h2
+            ref={headlineRef}
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-[#1c1b18] leading-[1.12] max-w-4xl"
+          >
+            I build digital spaces that don’t just function—they{" "}
+            <span className="gold-ink-highlight">resonate.</span>
+          </h2>
+        </div>
 
-            {/* Glowing border wrapper */}
-            <div
-              className="relative rounded-2xl p-px"
-              style={{
-                background: "linear-gradient(135deg, rgba(61,139,255,0.45) 0%, rgba(61,139,255,0.05) 50%, rgba(61,139,255,0.18) 100%)",
-              }}
-            >
-              <div
-                className="relative rounded-2xl overflow-hidden flex flex-col"
-                style={{ background: "#0f0f18", minHeight: "380px" }}
-              >
-                {/* Editor top bar */}
-                <div
-                  className="flex items-center gap-2 px-5 py-3"
-                  style={{
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    background: "rgba(255,255,255,0.02)",
-                  }}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(239,68,68,0.6)" }} />
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(234,179,8,0.6)" }} />
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(34,197,94,0.6)" }} />
-                  <span className="mono text-white/20 text-[11px] ml-3 tracking-wider">about.ts</span>
-                </div>
+        {/* ── TWO-COLUMN EDITORIAL SPREAD ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20 sm:mb-28">
+          
+          {/* ── LEFT COLUMN (NARRATIVE, ROOTS & IDENTITY) ── */}
+          <div className="lg:col-span-5 flex flex-col gap-6 sm:gap-8">
+            <div className="about-narrative flex flex-col gap-4 text-sm sm:text-[15px] md:text-base leading-relaxed text-[#3a372f]">
+              <p>
+                Based in <span className="font-semibold text-[#1c1b18]">Siliguri, India</span>, I am a creative front-end developer and associate engineer obsessed with the convergence of <span className="font-semibold text-[#1c1b18]">artistic motion</span>, <span className="font-semibold text-[#1c1b18]">WebGL graphics</span>, and <span className="font-semibold text-[#1c1b18]">robust software systems</span>.
+              </p>
+              <p>
+                Too much of the modern web feels generic—flat cards, template gradients, and soulless layouts. My approach is rooted in craftsmanship: treating digital interfaces like tactile editorial artifacts where every interaction, transition, and micro-moment feels intentional, fluid, and alive.
+              </p>
+              <p>
+                Whether engineering high-reliability React Native applications in the medical domain, choreographing GSAP scroll timelines, or writing GLSL pixel shaders, I prioritize 60fps performance and emotional connection above all else.
+              </p>
+            </div>
 
-                {/* Code body */}
-                <div
-                  className="flex-1 p-6 mono leading-[2.1] select-none"
-                  style={{ fontSize: "clamp(0.7rem, 1vw, 0.82rem)", color: "rgba(255,255,255,0.3)" }}
-                >
-                  <p>
-                    <span style={{ color: "#60a5fa" }}>const </span>
-                    <span style={{ color: "#34d399" }}>developer</span>
-                    <span> = </span>
-                    <span style={{ color: "#fbbf24" }}>{`{`}</span>
-                  </p>
-                  <p className="pl-5">
-                    <span style={{ color: "#f9a8d4" }}>name</span>
-                    <span>: </span>
-                    <span style={{ color: "#86efac" }}>"Naren Roy"</span>
-                    <span>,</span>
-                  </p>
-                  <p className="pl-5">
-                    <span style={{ color: "#f9a8d4" }}>role</span>
-                    <span>: </span>
-                    <span style={{ color: "#86efac" }}>"Frontend Developer"</span>
-                    <span>,</span>
-                  </p>
-                  <p className="pl-5">
-                    <span style={{ color: "#f9a8d4" }}>location</span>
-                    <span>: </span>
-                    <span style={{ color: "#86efac" }}>"Siliguri, IN"</span>
-                    <span>,</span>
-                  </p>
-                  <p className="pl-5">
-                    <span style={{ color: "#f9a8d4" }}>stack</span>
-                    <span>: [</span>
-                  </p>
-                  <p className="pl-10">
-                    <span style={{ color: "#86efac" }}>"React"</span>
-                    <span>, </span>
-                    <span style={{ color: "#86efac" }}>"GSAP"</span>
-                    <span>, </span>
-                    <span style={{ color: "#86efac" }}>"TypeScript"</span>
-                    <span>,</span>
-                  </p>
-                  <p className="pl-10">
-                    <span style={{ color: "#86efac" }}>"Node.js"</span>
-                    <span>, </span>
-                    <span style={{ color: "#86efac" }}>"Three.js"</span>
-                    <span>,</span>
-                  </p>
-                  <p className="pl-5"><span>],</span></p>
-                  <p className="pl-5">
-                    <span style={{ color: "#f9a8d4" }}>available</span>
-                    <span>: </span>
-                    <span style={{ color: "#60a5fa" }}>true</span>
-                    <span>,</span>
-                  </p>
-                  <p><span style={{ color: "#fbbf24" }}>{`}`}</span><span>;</span></p>
-                </div>
+            {/* ── Editorial Location & Availability Plaque ── */}
+            <div className="about-narrative p-5 sm:p-6 rounded-2xl bg-[#ded9cc]/60 border border-[#1c1b18]/15 backdrop-blur-sm shadow-sm flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#5a554a]">
+                  CURRENT LOCATION
+                </span>
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#1c1b18]">
+                  <Compass className="w-3.5 h-3.5 text-[#f5be0b]" />
+                  Siliguri, WB, India
+                </span>
+              </div>
 
-                {/* Cursor line */}
-                <div
-                  className="flex items-center gap-1.5 px-6 pb-5 mono"
-                  style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.2)" }}
-                >
-                  <span style={{ color: "#3d8bff" }}>▶</span>
-                  <span className="cursor-blink inline-block w-2 h-[1.1em]" style={{ background: "#3d8bff" }} />
-                </div>
+              <div className="w-full h-px bg-[#1c1b18]/10" />
 
-                {/* Inner corner glow */}
-                <div
-                  className="absolute bottom-0 right-0 w-56 h-56 pointer-events-none"
-                  style={{ background: "radial-gradient(circle, rgba(61,139,255,0.07) 0%, transparent 70%)" }}
-                />
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#5a554a]">
+                  AVAILABILITY
+                </span>
+                <span className="flex items-center gap-2 text-[11px] font-bold text-emerald-800">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
+                  </span>
+                  Open for Opportunities
+                </span>
               </div>
             </div>
+          </div>
 
-            {/* Floating badge */}
-            <div
-              className="absolute -top-3.5 -right-3.5 mono text-[11px] px-3 py-1.5 rounded-full tracking-wider"
-              style={{
-                color: "#3d8bff",
-                background: "rgba(61,139,255,0.10)",
-                border: "1px solid rgba(61,139,255,0.28)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              Open to Work ✦
+          {/* ── RIGHT COLUMN (INTERACTIVE CRAFT INDEX / PILLARS) ── */}
+          <div ref={cardsRef} className="lg:col-span-7 flex flex-col gap-4 sm:gap-5">
+            <div className="flex items-center justify-between pb-2 border-b border-[#1c1b18]/15">
+              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#5a554a]">
+                CORE DISCIPLINES & EXPERTISE
+              </span>
+              <span className="text-[11px] font-medium text-[#1c1b18]/50">
+                04 Specializations
+              </span>
             </div>
 
-            {/* Decorative corner lines */}
-            <div className="absolute -bottom-3 -left-3 w-6 h-6 pointer-events-none"
-              style={{ borderLeft: "1.5px solid rgba(61,139,255,0.3)", borderBottom: "1.5px solid rgba(61,139,255,0.3)" }} />
-            <div className="absolute -top-3 -left-3 w-6 h-6 pointer-events-none"
-              style={{ borderLeft: "1.5px solid rgba(61,139,255,0.3)", borderTop: "1.5px solid rgba(61,139,255,0.3)" }} />
+            <div className="flex flex-col gap-3.5 sm:gap-4">
+              {DISCIPLINES.map((item) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={item.num}
+                    className="about-craft-card group p-5 sm:p-6 rounded-2xl bg-[#f0ece1]/80 hover:bg-[#fffdf7] border border-[#1c1b18]/10 hover:border-[#f5be0b] transition-all duration-300 shadow-sm hover:shadow-md cursor-default"
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-2.5">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs sm:text-sm font-mono font-bold text-[#f5be0b] tracking-wider">
+                          {item.num}
+                        </span>
+                        <h3 className="text-base sm:text-lg font-bold text-[#1c1b18] group-hover:text-black transition-colors">
+                          {item.title}
+                        </h3>
+                      </div>
+                      <div className="p-2 rounded-xl bg-[#e6e2d7] group-hover:bg-[#f5be0b] text-[#1c1b18] transition-colors shrink-0">
+                        <IconComponent className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-[#47443c] leading-relaxed mb-4">
+                      {item.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {item.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold tracking-wide bg-[#e6e2d7] text-[#2e2c26] border border-[#1c1b18]/10 group-hover:border-[#1c1b18]/20 transition-all"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
         </div>
+
+        {/* ── METRICS LEDGER RIBBON ── */}
+        <div
+          ref={metricsRef}
+          className="w-full pt-10 sm:pt-14 border-t border-[#1c1b18]/15"
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
+            {METRICS.map((m) => (
+              <div
+                key={m.label}
+                className="about-metric-item flex flex-col gap-1.5 group cursor-default"
+              >
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#1c1b18] group-hover:text-[#d97706] transition-colors">
+                    {m.value}
+                  </span>
+                </div>
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#1c1b18]">
+                  {m.label}
+                </span>
+                <span className="text-[11px] text-[#5a554a] font-normal">
+                  {m.detail}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );
