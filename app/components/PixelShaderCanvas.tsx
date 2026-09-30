@@ -12,6 +12,9 @@ export default function PixelShaderCanvas({ bgSrc, meSrc, className = "" }: Pixe
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Disable WebGL completely on tablets and mobile screens (< 1024px)
+    if (typeof window !== "undefined" && window.innerWidth < 1024) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
