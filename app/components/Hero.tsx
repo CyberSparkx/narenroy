@@ -258,12 +258,12 @@ export default function Hero() {
 
           {/* Main Display Headline (Authentic Brushed Ink Typography with full 'y' descender) */}
           <div ref={headlineRef} className="mb-2 sm:mb-3 md:mb-4 lg:mb-5">
-            <h1 className="sr-only">Naren Roy — Full Stack Software Developer</h1>
+            <h1 className="sr-only">Naren Roy — Creative Frontend & Full Stack Developer | React, Next.js, WebGL</h1>
 
             <div className="relative inline-block select-none">
               <img
                 src="/naren-roy-title.png"
-                alt="Naren Roy"
+                alt="Naren Roy — Creative Frontend and Full Stack Developer"
                 className="hero-headline-img w-[210px] xs:w-[250px] sm:w-[320px] md:w-[440px] lg:w-[490px] h-auto object-contain select-none pointer-events-none mix-blend-multiply"
               />
             </div>
@@ -277,7 +277,7 @@ export default function Hero() {
             <div className="absolute inset-0 w-full h-full">
               <Image
                 src="/bg.png"
-                alt="Yellow energy art"
+                alt="Naren Roy Abstract Creative Energy Artwork"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -287,7 +287,7 @@ export default function Hero() {
             <div className="absolute inset-0 w-full h-full">
               <Image
                 src="/me.png"
-                alt="Naren Roy Portrait"
+                alt="Naren Roy — Creative Frontend and Full Stack Developer Portrait"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"

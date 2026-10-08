@@ -1,0 +1,42 @@
+# Naren Roy
+
+> Full Stack & Creative Frontend Developer based in Siliguri, West Bengal, India. Specializing in high-performance React, Next.js, kinetic GSAP motion choreography, and interactive WebGL experiences.
+
+## Summary
+Naren Roy is a Creative Frontend Engineer and Full Stack Software Developer known for building high-performance web applications that bridge engineering precision with expressive kinetic motion. His work encompasses custom WebGL shader graphics, 60fps GSAP scroll timelines, React Native mobile apps, and robust full-stack architectures.
+
+## Identity & Contact
+- **Full Name**: Naren Roy
+- **Aliases**: CyberSparkx, Naren Sarkar
+- **Role**: Full Stack & Creative Frontend Developer
+- **Location**: Siliguri, West Bengal, India
+- **Canonical Website**: https://www.narenroy.in
+- **Email**: narensarkar607@gmail.com
+- **Phone**: +91 7864066694
+- **GitHub**: https://github.com/CyberSparkx
+- **LinkedIn**: https://www.linkedin.com/in/naren-roy-4390a6238/
+- **X (Twitter)**: https://twitter.com/NarenRo26790356
+
+## Core Tech Stack
+- **Languages**: TypeScript, JavaScript (ES6+), Python, C, GLSL
+- **Frontend Frameworks**: React.js, Next.js (App Router), React Native
+- **Creative & Motion**: WebGL, Three.js, React Three Fiber, GSAP (ScrollTrigger), Lenis
+- **Styling**: Tailwind CSS, CSS3 Modules, Responsive Typography
+- **Backend & APIs**: Node.js, Express.js, RESTful APIs, WebSockets, Socket.IO
+- **Databases**: MongoDB, Mongoose, Firebase
+- **Tooling & Cloud**: Git, GitHub, Vercel, Postman, Docker, Figma
+
+## Key Works & Projects
+1. **The Darjeeling** (Live: https://the-darjeeling.vercel.app | Code: https://github.com/CyberSparkx)
+   - Interactive regional storytelling experience featuring WebGL canvas shaders, fluid physics, and GSAP scroll choreography running at steady 60fps.
+2. **OpenScreen** (Code: https://github.com/CyberSparkx)
+   - Open-source screen recording and demo platform. Authored WCAG accessibility improvements and keyboard-navigable recording controls.
+
+## Professional Experience
+- **Freelance Creative Developer & Full Stack Engineer** (Present): Bespoke interactive websites, GLSL shaders, and full-stack Next.js applications for global clients.
+- **Software Engineer at Fordel Studios / Yellowchalk** (2026): Interactive OTT streaming frontend engineered with React.js and Next.js.
+- **Associate Developer at Appycodes Technologies LLP** (2025–2026): Production medical and healthcare applications with React Native, React.js, and REST APIs.
+- **Full Stack Developer Intern at Edunet Foundation** (2024–2025).
+
+## Education
+- Diploma in Computer Science and Technology — Siliguri Government Polytechnic (2022–Present).

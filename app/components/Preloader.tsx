@@ -160,10 +160,16 @@ export default function Preloader() {
           style={{ opacity: 0 }}
           className="flex flex-col items-center justify-center text-center will-change-transform"
         >
-          <h1 className="preloader-devanagari text-4xl sm:text-5xl md:text-6xl font-normal text-[#1c1b18] tracking-normal mb-2">
+          <span
+            className="preloader-devanagari text-4xl sm:text-5xl md:text-6xl font-normal text-[#1c1b18] tracking-normal mb-2 block"
+            aria-hidden="true"
+          >
             नमस्ते
-          </h1>
-          <p className="preloader-serif text-xs sm:text-sm md:text-base font-semibold tracking-[0.42em] uppercase text-[#a86e3b] ml-1.5">
+          </span>
+          <p
+            className="preloader-serif text-xs sm:text-sm md:text-base font-semibold tracking-[0.42em] uppercase text-[#a86e3b] ml-1.5"
+            aria-hidden="true"
+          >
             NAMASTE
           </p>
         </div>

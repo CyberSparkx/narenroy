@@ -1,12 +1,12 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://www.narenroy.in',
+      url: "https://www.narenroy.in",
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1,
+      changeFrequency: "weekly",
+      priority: 1.0,
     },
-  ]
+  ];
 }
